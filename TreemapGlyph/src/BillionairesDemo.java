@@ -219,7 +219,7 @@ public class BillionairesDemo extends AbstractDemo {
 
     private TableModel createBillionairesTableModel() {
         try {
-            InputStream resource = this.getClass().getClassLoader().getResourceAsStream("billionaires2010.txt.gz");
+            InputStream resource = this.getClass().getClassLoader().getResourceAsStream("carros_teste3.txt.gz");
             if (resource == null) {
                 return null;
             }

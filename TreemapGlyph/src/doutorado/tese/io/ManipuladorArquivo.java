@@ -41,19 +41,19 @@ public class ManipuladorArquivo {
         file = arquivo;
         try (BufferedReader reader = Files.newBufferedReader(file.toPath(), charset)) {
             String line = null;
-            int cont = 0;
+            int numLinha = 0;
 
             while ((line = reader.readLine()) != null) {
-                if (cont == 0) {
+                if (numLinha == 0) {
                     cabecalho = montarCabecalho(line);
                 }
-                if (cont == 1) {
+                if (numLinha == 1) {
                     tipos = desvendarTiposDados(line);
                     montarMapaCabecalhoTipos(getCabecalho(), tipos);
                 }
 //                montarColunas(cabecalho, tipos);
                 bufferArquivo.append(line).append("\n");
-                cont++;
+                numLinha++;
             }
             linhas = bufferArquivo.toString().split("\n");
         } catch (IOException e) {
@@ -69,9 +69,9 @@ public class ManipuladorArquivo {
      */
     public String[] getDadosColuna(String nomeColuna) {
 //        String[] linhas = bufferArquivo.toString().split("\n");
-        String[] dados = new String[linhas.length - 2];
-        for (int numLinha = 2; numLinha < linhas.length; numLinha++) {
-            String[] vetorLinha = linhas[numLinha].split("\t|,");
+        String[] dados = new String[getLinhas().length - 2];
+        for (int numLinha = 2; numLinha < getLinhas().length; numLinha++) {
+            String[] vetorLinha = getLinhas()[numLinha].split("\t|,");
             for (int j = 0; j < cabecalho.length; j++) {
                 if (cabecalho[j].equalsIgnoreCase(nomeColuna)) {
                     dados[numLinha - 2] = vetorLinha[j];
@@ -83,8 +83,12 @@ public class ManipuladorArquivo {
     }
 
     public String[] getDadosLinha(int numLinha) {
-//        String[] linhas = bufferArquivo.toString().split("\n");
-        String[] vetorLinha = linhas[numLinha].split("\t|,");
+        String[] vetorLinha = getLinhas()[numLinha].split("\t|,");
+        return vetorLinha;
+    }
+    
+    public Object[] getDadosByLinha(int numLinha) {
+        String[] vetorLinha = getLinhas()[numLinha].split("\t|,");
         return vetorLinha;
     }
 
@@ -175,17 +179,17 @@ public class ManipuladorArquivo {
         Class[] classes = new Class[tipos.length];
         for (int i = 0; i < tipos.length; i++) {
             switch (tipos[i]) {
-                case "STRING": classes[i] = String.class;
+                case "String": classes[i] = String.class;
                 break;
-                case "INTEGER": classes[i] = Integer.class;
+                case "Integer": classes[i] = Integer.class;
                 break;
-                case "DOUBLE": classes[i] = Double.class;
+                case "Double": classes[i] = Double.class;
                 break;
-                case "FLOAT": classes[i] = Float.class;
+                case "Float": classes[i] = Float.class;
                 break;
-                case "BOOLEAN": classes[i] = Boolean.class;
+                case "Boolean": classes[i] = Boolean.class;
                 break;
-            };
+            }
         }
         return classes;
     }
@@ -215,6 +219,13 @@ public class ManipuladorArquivo {
             }
             itensTreemap[i] = itemLocal;
         }
+    }
+
+    /**
+     * @return the linhas
+     */
+    public String[] getLinhas() {
+        return linhas;
     }
 
 }

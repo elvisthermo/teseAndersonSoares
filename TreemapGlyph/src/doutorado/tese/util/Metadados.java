@@ -12,7 +12,7 @@ package doutorado.tese.util;
 public class Metadados {
 
     public enum TipoDados {
-        INTEGER, DOUBLE, STRING, BOOLEAN;
+        Integer, Double, String, Float, Boolean;
     }
 
     public enum Descricao {

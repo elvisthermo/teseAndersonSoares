@@ -518,7 +518,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         List<String> itens = new ArrayList<>();
         for (String cabecalho : manipulador.getCabecalho()) {
             String tipo = manipulador.getMapaCabecalho().get(cabecalho);
-            if (tipo.equalsIgnoreCase(Metadados.TipoDados.INTEGER.name())) {
+            if (tipo.equalsIgnoreCase(Metadados.TipoDados.Integer.name())) {
                 itens.add(cabecalho);
             }
         }
@@ -555,8 +555,8 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         List<String> itens = new ArrayList<>();
         for (String cabecalho : manipulador.getCabecalho()) {
             String tipo = manipulador.getMapaCabecalho().get(cabecalho);
-            if (tipo.equalsIgnoreCase(Metadados.TipoDados.INTEGER.name())
-                    || tipo.equalsIgnoreCase(Metadados.TipoDados.DOUBLE.name())) {
+            if (tipo.equalsIgnoreCase(Metadados.TipoDados.Integer.name())
+                    || tipo.equalsIgnoreCase(Metadados.TipoDados.Double.name())) {
                 itens.add(cabecalho);
             }
         }

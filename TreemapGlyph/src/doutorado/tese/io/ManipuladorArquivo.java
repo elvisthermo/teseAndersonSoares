@@ -5,6 +5,7 @@
  */
 package doutorado.tese.io;
 
+import static doutorado.tese.gui.TesteTreemapAPI.verificarTipoDado;
 import doutorado.tese.util.Coluna;
 import doutorado.tese.visualizacao.treemap.TreeMapItem;
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -86,7 +88,7 @@ public class ManipuladorArquivo {
         String[] vetorLinha = getLinhas()[numLinha].split("\t|,");
         return vetorLinha;
     }
-    
+
     public Object[] getDadosByLinha(int numLinha) {
         String[] vetorLinha = getLinhas()[numLinha].split("\t|,");
         return vetorLinha;
@@ -179,16 +181,21 @@ public class ManipuladorArquivo {
         Class[] classes = new Class[tipos.length];
         for (int i = 0; i < tipos.length; i++) {
             switch (tipos[i]) {
-                case "String": classes[i] = String.class;
-                break;
-                case "Integer": classes[i] = Integer.class;
-                break;
-                case "Double": classes[i] = Double.class;
-                break;
-                case "Float": classes[i] = Float.class;
-                break;
-                case "Boolean": classes[i] = Boolean.class;
-                break;
+                case "String":
+                    classes[i] = String.class;
+                    break;
+                case "Integer":
+                    classes[i] = Integer.class;
+                    break;
+                case "Double":
+                    classes[i] = Double.class;
+                    break;
+                case "Float":
+                    classes[i] = Float.class;
+                    break;
+                case "Boolean":
+                    classes[i] = Boolean.class;
+                    break;
             }
         }
         return classes;
@@ -226,6 +233,45 @@ public class ManipuladorArquivo {
      */
     public String[] getLinhas() {
         return linhas;
+    }
+
+    /**
+     * Responsavel por fazer a analise do tipo do dado. Essa analise e
+     * importante para que o DataModel que sera enviado ao treemap possa
+     * carregar o treemap corretamente.
+     *
+     * @param dado
+     * @param type
+     * @return O dado convertido em seu tipo original
+     */
+    public static Object verificarTipoDado(String dado, Class type) {
+        Object valorConvertido = null;
+        if (dado != null && dado.length() != 0) {
+            if (type.equals(Integer.class)) {
+                valorConvertido = Integer.parseInt(dado);
+            } else if (type.equals(Double.class)) {
+                valorConvertido = Double.parseDouble(dado);
+            } else if (type.equals(Float.class)) {
+                valorConvertido = Float.parseFloat(dado);
+            } else {
+                valorConvertido = dado;
+            }
+        } else {
+            valorConvertido = null;
+        }
+        return valorConvertido;
+    }
+
+    public Object[][] montarMatrizDados() {
+        Object[][] data = new Object[getLinhas().length - 2][getCabecalho().length];
+        for (int lin = 0; lin < getLinhas().length - 2; lin++) {
+            String[] linha = getDadosLinha(lin + 2);
+            for (int col = 0; col < linha.length; col++) {
+                Object valorConvertido = verificarTipoDado(linha[col], getClassTipos()[col]);
+                data[lin][col] = valorConvertido;
+            }
+        }
+        return data;
     }
 
 }

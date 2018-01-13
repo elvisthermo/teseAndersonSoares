@@ -36,9 +36,11 @@ public class StarGlyph {
         this.rect = r;
         this.variaveisEscolhidasStarGlyph = variaveisEscolhidasStarGlyph;
     }
+
     /**
-     * Calcula quantos porcentos o dado atual da linha corrente equivale ao valor max
-     * da coluna.
+     * Calcula quantos porcentos o dado atual da linha corrente equivale ao
+     * valor max da coluna.
+     *
      * @param dadoColuna
      * @param maxValCol
      * @return Porcentagem equivalente ao valor max da coluna.
@@ -47,28 +49,30 @@ public class StarGlyph {
         return (dadoColuna * 100) / maxValCol;
     }
 
-    private double calcularPorcentagemParaR(double porcentagemDado, double maiorRaio){
+    private double calcularPorcentagemParaR(double porcentagemDado, double maiorRaio) {
         return (porcentagemDado * maiorRaio) / 100;
     }
-    
+
     public void paint(Graphics g) {
-        anguloAcc = 360 / getQuantVar();
-        anguloAlfa = 0;
-        int maiorRaio = encontrarMaiorRaio();
+        if (getQuantVar() != 0) {
+            anguloAcc = 360 / getQuantVar();
+            anguloAlfa = 0;
+            int maiorRaio = encontrarMaiorRaio();
 //        System.out.println("Desenhar eixos polares deste star glyph");
-        for (int i = 0; i < getQuantVar(); i++) {
-            String nomeColuna = variaveisEscolhidasStarGlyph.get(i);
-            Coluna coluna = getManipulador().getColuna(nomeColuna);
-            String[] dadosColuna = coluna.getDadosColuna();
-            double dado = Double.parseDouble(dadosColuna[numLinha]);
-            double dadoMaxVal = coluna.getMapaMaiorMenor().get(coluna.getName())[0];//0 - maxValue; 1 - minValue
-            double porcentagemDado = calcularPorcentagemDado(dado, dadoMaxVal);
-            r = calcularPorcentagemParaR(porcentagemDado, maiorRaio);
-            g.setColor(Color.decode(Flags.getCor()[i]));
-            desenharEixoPolar(g);
-            anguloAlfa += anguloAcc;
+            for (int i = 0; i < getQuantVar(); i++) {
+                String nomeColuna = variaveisEscolhidasStarGlyph.get(i);
+                Coluna coluna = getManipulador().getColuna(nomeColuna);
+                String[] dadosColuna = coluna.getDadosColuna();
+                double dado = Double.parseDouble(dadosColuna[numLinha]);
+                double dadoMaxVal = coluna.getMapaMaiorMenor().get(coluna.getName())[0];//0 - maxValue; 1 - minValue
+                double porcentagemDado = calcularPorcentagemDado(dado, dadoMaxVal);
+                r = calcularPorcentagemParaR(porcentagemDado, maiorRaio);
+                g.setColor(Color.decode(Flags.getCor()[i]));
+                desenharEixoPolar(g);
+                anguloAlfa += anguloAcc;
+            }
+            numLinha++;
         }
-        numLinha++;
     }
 
     public void encontrarPontoCentro(int halfWidth, int width, int halfHeight, int height) {

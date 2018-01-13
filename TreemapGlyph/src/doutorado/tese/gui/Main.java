@@ -5,6 +5,7 @@
  */
 package doutorado.tese.gui;
 
+import com.macrofocus.treemap.TreeMap;
 import doutorado.tese.io.ManipuladorArquivo;
 import doutorado.tese.util.Coluna;
 import doutorado.tese.util.Flags;
@@ -17,6 +18,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -156,6 +158,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        variaveisStarList.setEnabled(false);
         jScrollPane1.setViewportView(variaveisStarList);
 
         painelLegenda.setEditable(false);
@@ -286,25 +289,28 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public String[] parseListString2Vetor(List<String> lista){
+    public String[] parseListString2Vetor(List<String> lista) {
         String[] convertida = new String[lista.size()];
         for (int i = 0; i < convertida.length; i++) {
             convertida[i] = lista.get(i);
         }
         return convertida;
     }
-    
+
     private void botaoGerarTreemapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoGerarTreemapActionPerformed
         limparPainelEsquerda();
         String itemTamanho = tamanhoTreeampComboBox.getSelectedItem().toString();
         String itemLegenda = legendaComboBox.getSelectedItem().toString();
-        String [] itensHierarquia = parseListString2Vetor(hierarquiaList.getSelectedValuesList());
+        String[] itensHierarquia = parseListString2Vetor(hierarquiaList.getSelectedValuesList());
         List<String> variaveisStarGlyph = variaveisStarList.getSelectedValuesList();
 
         AreaDesenho areaDesenho = new AreaDesenho(painelEsquerda.getWidth(), painelEsquerda.getHeight(),
-                itemTamanho, itemLegenda, itensHierarquia, variaveisStarGlyph, manipulador);
-
+                variaveisStarGlyph, manipulador);
+        
+        TreeMap treemapInfoVis = areaDesenho.loadTreemap(itemTamanho, itensHierarquia, itemLegenda, "");
+                
         painelEsquerda.add(areaDesenho);
+        painelEsquerda.add(treemapInfoVis);
         painelEsquerda.repaint();
         prepararLegendaStarGlyph(variaveisStarGlyph);
         progressoBarra.setVisible(false);
@@ -313,8 +319,10 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
     private void checkStarGlyphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkStarGlyphActionPerformed
         if (checkStarGlyph.isSelected()) {
             Flags.setShowStarGlyph(true);
+            variaveisStarList.setEnabled(true);
         } else {
             Flags.setShowStarGlyph(false);
+            variaveisStarList.setEnabled(false);
         }
     }//GEN-LAST:event_checkStarGlyphActionPerformed
 
@@ -330,9 +338,9 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
 
     private void checkGlyphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkGlyphActionPerformed
         if (checkGlyph.isSelected()) {
-            Flags.setShowGlyph(true);
+            Flags.setShowGlyph(true);            
         } else {
-            Flags.setShowGlyph(false);
+            Flags.setShowGlyph(false);            
         }
     }//GEN-LAST:event_checkGlyphActionPerformed
 
@@ -523,6 +531,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
             }
         }
         atualizarComboBox(tamanhoTreeampComboBox, itens);
+        tamanhoTreeampComboBox.setEnabled(true);
     }
 
     private void loadItensLegendaTreemap() {
@@ -535,7 +544,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
     private void loadItensHierarquiaTreemap() {
         List<String> list = new ArrayList<>();
         for (Coluna c : manipulador.getColunas()) {
-            if(c.getDescription().equals(Metadados.Descricao.CATEGORICAL)){
+            if (c.getDescription().equals(Metadados.Descricao.CATEGORICAL)) {
                 list.add(c.getName());
             }
         }
@@ -547,8 +556,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
     private void atualizarComboBox(JComboBox comboBox, List<String> itens) {
         Object[] items = itens.toArray();
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
-        comboBox.setModel(model);
-        comboBox.setEnabled(true);
+        comboBox.setModel(model);        
     }
 
     private void loadVariaveisStartGlyph() {
@@ -563,7 +571,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         Object[] items = itens.toArray();
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
         variaveisStarList.setModel(model);
-        variaveisStarList.setEnabled(true);
+//        variaveisStarList.setEnabled(true);
     }
 
     private void appendToPane(JTextPane tp, String msg, Color c) {

@@ -309,6 +309,8 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         
         TreeMap treemapInfoVis = areaDesenho.loadTreemap(itemTamanho, itensHierarquia, itemLegenda, "");
                 
+//        treemapInfoVis.getModel().getSettings().
+        
         painelEsquerda.add(areaDesenho);
         painelEsquerda.add(treemapInfoVis);
         painelEsquerda.repaint();

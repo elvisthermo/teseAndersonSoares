@@ -229,7 +229,7 @@ public class ManipuladorArquivo {
     }
 
     /**
-     * @return the linhas
+     * @return Total de linhas do arquivo, incluindo cabeçalho e linha de tipos (caso tenha)
      */
     public String[] getLinhas() {
         return linhas;

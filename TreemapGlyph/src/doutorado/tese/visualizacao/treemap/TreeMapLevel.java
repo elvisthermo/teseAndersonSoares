@@ -30,6 +30,12 @@ public class TreeMapLevel extends TreeMapNode {
         bordaInterna = rect;
     }
 
+    public TreeMapLevel() {
+        itemsFilhos = new ArrayList<>();
+    }
+
+    
+    
     /**
      * Creates a Map Model instance based on the relative size of the mappable
      * itemsFilhos and the frame size.
@@ -119,6 +125,10 @@ public class TreeMapLevel extends TreeMapNode {
             filhosIten.setDepth(this.getDepth() + 1);
         }
         this.size = sum;
+    }
+    
+    public void setSize(Double tamanho) {
+        this.size = tamanho;
     }
 
     @Override

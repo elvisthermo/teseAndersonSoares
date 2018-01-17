@@ -57,13 +57,17 @@ public class TreeMapItem extends TreeMapNode {
         this.size = Double.parseDouble(mapaDetalhesItem.get(colunaTamanho));
     }
 
+    public void setSize(Double tamanho) {
+        this.size = tamanho;
+    }
+    
     /**
      * @param coluna o obj coluna para definir o label
      */
     public void setLabel(Coluna coluna) {
         this.columnLabel = coluna.getName();
     }
-
+    
     @Override
     public ArrayList<TreeMapNode> getItemsFilhos() {
         return itemsFilhos;

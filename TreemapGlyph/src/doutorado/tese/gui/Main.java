@@ -5,7 +5,6 @@
  */
 package doutorado.tese.gui;
 
-import com.macrofocus.treemap.TreeMap;
 import doutorado.tese.io.ManipuladorArquivo;
 import doutorado.tese.util.Coluna;
 import doutorado.tese.util.Flags;
@@ -18,7 +17,6 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -304,15 +302,19 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         String[] itensHierarquia = parseListString2Vetor(hierarquiaList.getSelectedValuesList());
         List<String> variaveisStarGlyph = variaveisStarList.getSelectedValuesList();
 
-        AreaDesenho areaDesenho = new AreaDesenho(painelEsquerda.getWidth(), painelEsquerda.getHeight(),
-                variaveisStarGlyph, manipulador);
-        
-        TreeMap treemapInfoVis = areaDesenho.loadTreemap(itemTamanho, itensHierarquia, itemLegenda, "");
+//        AreaDesenho areaDesenho = new AreaDesenho(painelEsquerda.getWidth(), painelEsquerda.getHeight(),
+//                variaveisStarGlyph, manipulador);
+        //API Macrofocus
+//        TreeMap treemapInfoVis = areaDesenho.loadTreemap(itemTamanho, itensHierarquia, itemLegenda, "");
                 
 //        treemapInfoVis.getModel().getSettings().
         
-        painelEsquerda.add(areaDesenho);
-        painelEsquerda.add(treemapInfoVis);
+//        painelEsquerda.add(areaDesenho);
+//        painelEsquerda.add(treemapInfoVis);
+
+        VisualizationsArea v = new VisualizationsArea(painelEsquerda.getWidth(), painelEsquerda.getHeight(),
+                manipulador, itemTamanho, itensHierarquia, itemLegenda, variaveisStarGlyph);
+        painelEsquerda.add(v.getView());
         painelEsquerda.repaint();
         prepararLegendaStarGlyph(variaveisStarGlyph);
         progressoBarra.setVisible(false);

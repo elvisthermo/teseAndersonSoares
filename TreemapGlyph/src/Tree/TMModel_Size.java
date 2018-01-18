@@ -46,7 +46,7 @@ public class TMModel_Size
 
     @Override
     public boolean isCompatibleWithObject(Object node) {
-        return node instanceof TMTreeMapItemModelNode;
+        return node instanceof TreeMapNode;
     }
 
     /**
@@ -56,9 +56,9 @@ public class TMModel_Size
      */
     @Override
     public float getSizeOfObject(Object node) {
-        if (node instanceof TMTreeMapItemModelNode) {
-            TMTreeMapItemModelNode n = (TMTreeMapItemModelNode) node;
-            return (float) Math.round(((TreeMapNode)n.getNodo()).getSize());
+        if (node instanceof TreeMapNode) {
+            TreeMapNode n = (TreeMapNode) node;
+            return (float) Math.round(n.getSize());
         }
         return 0.0f;
     }

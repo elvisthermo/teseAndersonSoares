@@ -7,7 +7,7 @@ package doutorado.tese.visualizacao.treemap.layout;
 
 import doutorado.tese.visualizacao.treemap.Rect;
 import doutorado.tese.visualizacao.treemap.TreeMapNode;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,11 +16,11 @@ import java.util.ArrayList;
 public class Squarify {
 
     public void squarify(TreeMapNode treemapLevel) {
-        ArrayList<TreeMapNode> arrayItems = treemapLevel.getItemsFilhos();
+        List<TreeMapNode> arrayItems = treemapLevel.getChildren();
 
         if (treemapLevel.isHasChildren()) {
             int start = 0;
-            int end = treemapLevel.getItemsFilhos().size();
+            int end = treemapLevel.getChildren().size();
             Rect rectangle = treemapLevel.getBordaInterna();
 
             int a = 0;
@@ -75,7 +75,7 @@ public class Squarify {
         }
     }
 
-    private int sum(ArrayList<TreeMapNode> items, int _start, int _end) {
+    private int sum(List<TreeMapNode> items, int _start, int _end) {
         int sumValuesItems = 0;//essa varia ira armazenar a soma dos valores dos items
         for (int i = _start; i < _end; i++) {
             sumValuesItems += items.get(i).getSize();
@@ -84,7 +84,7 @@ public class Squarify {
         return sumValuesItems;
     }
 
-    private void sliceLayout(ArrayList<TreeMapNode> items, int start, int end, int totalSlice, Rect rectangleBounds) {
+    private void sliceLayout(List<TreeMapNode> items, int start, int end, int totalSlice, Rect rectangleBounds) {
         boolean vertical = false;
         int aSlice = 0;
         int bSlice = 0;

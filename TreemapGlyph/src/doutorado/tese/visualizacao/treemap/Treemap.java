@@ -9,15 +9,16 @@ import doutorado.tese.io.ManipuladorArquivo;
 import doutorado.tese.util.Coluna;
 import doutorado.tese.visualizacao.treemap.layout.Squarify;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
  *
  * @author Anderson Soares
  */
+@Deprecated
 public class Treemap {
 
     ManipuladorArquivo manipulador;
@@ -33,7 +34,7 @@ public class Treemap {
         this.manipulador = manipulador;
         root = new TreeMapLevel(rect);
         root.setPaiLevel(null);
-        root.raiz = true;
+        root.setRaiz(true);
         root.setLabel("ROOT");
 //        squarifier = new TreeMapLayout();//squarifier original da app
 //        layout = new Squarify();
@@ -47,20 +48,20 @@ public class Treemap {
 
     public void setLabelColumn(Coluna column) {
         this.labelColumn = column.getName();
-        setTreemapItemLabel(this.root.getItemsFilhos(), true);
+        setTreemapItemLabel(this.root.getChildren(), true);
     }
 
-    public void setTreemapItemLabel(ArrayList<TreeMapNode> itemsFilhos, boolean isUseLabel) {
+    public void setTreemapItemLabel(List<TreeMapNode> itemsFilhos, boolean isUseLabel) {
         itemsFilhos.forEach((filho) -> {
             if (filho instanceof TreeMapItem) {
-                filho.isUseLabel = isUseLabel;
-                if (filho.isUseLabel) {
+                filho.setUseLabel(isUseLabel);
+                if (filho.isUseLabel()) {
 //                    filho.bounds.label = filho.getMapaDetalhesItem().get(ManipuladorArquivo.getColuna(labelColumn));
-                    filho.label = filho.getMapaDetalhesItem().get(ManipuladorArquivo.getColuna(labelColumn));
+                    filho.setLabel(filho.getMapaDetalhesItem().get(ManipuladorArquivo.getColuna(labelColumn)));
                 }
             } else {
                 TreeMapLevel level = (TreeMapLevel) filho;
-                setTreemapItemLabel(level.getItemsFilhos(), isUseLabel);
+                setTreemapItemLabel(level.getChildren(), isUseLabel);
             }
         });
     }
@@ -83,7 +84,7 @@ public class Treemap {
         //chamar squarifier
 //        squarifier.layoutSquarifiedTreemap(root);
 //        layout.squarify(root);
-        root.paint(g);
+//        root.paint(g);
     }
 
     public TreeMapNode getRoot() {

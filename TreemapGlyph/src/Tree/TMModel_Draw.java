@@ -29,8 +29,6 @@ package Tree;
 import doutorado.tese.visualizacao.treemap.TreeMapNode;
 import java.awt.Color;
 import java.awt.Paint;
-import java.io.File;
-import java.text.DateFormat;
 import java.util.Date;
 
 import net.bouthier.treemapAWT.TMComputeDrawAdapter;
@@ -62,17 +60,17 @@ public class TMModel_Draw
     /* --- TMComputeSizeAdapter -- */
 
     public boolean isCompatibleWithObject(Object node) {
-        return node instanceof TMTreeMapItemModelNode;
+        return node instanceof TreeMapNode;
     }
 
     @Override
     public Paint getFillingOfObject(Object node) {
-        if (node instanceof TMTreeMapItemModelNode) {
-            TMTreeMapItemModelNode n = (TMTreeMapItemModelNode) node;
-            long time = (long) ((TreeMapNode)n.getNodo()).getSize();
+        if (node instanceof TreeMapNode) {
+            TreeMapNode n = (TreeMapNode) node;
+            long time = (long) n.getSize();
             long diff = (new Date()).getTime() - time;
             if (diff <= 3600000L) { // less than an hour
-                return Color.white;
+                return Color.blue;
             } else if (diff <= 86400000L) { // less than a day
                 return Color.green;
             } else if (diff <= 604800000L) { // less than a week
@@ -82,16 +80,16 @@ public class TMModel_Draw
             } else if (diff <= 31536000000L) { // less than a year
                 return Color.red;
             } else { // more than a year
-                return Color.blue;
+                return Color.white;
             }
         }
         return Color.black;
     }
 
     public String getTooltipOfObject(Object node) {
-        if (node instanceof TMTreeMapItemModelNode) {
-            TMTreeMapItemModelNode n = (TMTreeMapItemModelNode) node;
-            String name = ((TreeMapNode)n.getNodo()).getLabel();
+        if (node instanceof TreeMapNode) {
+            TreeMapNode n = (TreeMapNode) node;
+            String name = n.getLabel();
 //            long modTime = n.lastModified();
 //            DateFormat df = DateFormat.getDateInstance(DateFormat.LONG);
 //            DateFormat tf = DateFormat.getTimeInstance(DateFormat.SHORT);
@@ -106,17 +104,17 @@ public class TMModel_Draw
 
     @Override
     public String getTitleOfObject(Object node) {
-        if (node instanceof TMTreeMapItemModelNode) {
-            TMTreeMapItemModelNode n = (TMTreeMapItemModelNode) node;
-            return ((TreeMapNode)n.getNodo()).getLabel();
+        if (node instanceof TreeMapNode) {
+            TreeMapNode n = (TreeMapNode) node;
+            return n.getLabel();
         }
         return "";
     }
 
     @Override
     public Paint getColorTitleOfObject(Object node) {
-        if (node instanceof TMTreeMapItemModelNode) {
-            TMTreeMapItemModelNode n = (TMTreeMapItemModelNode) node;
+        if (node instanceof TreeMapNode) {
+            TreeMapNode n = (TreeMapNode) node;
             return Color.black;
         }
         return Color.black;

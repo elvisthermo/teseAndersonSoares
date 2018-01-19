@@ -5,7 +5,6 @@
  */
 package doutorado.tese.io;
 
-import static doutorado.tese.gui.TesteTreemapAPI.verificarTipoDado;
 import doutorado.tese.util.Coluna;
 import doutorado.tese.visualizacao.treemap.TreeMapItem;
 import java.io.BufferedReader;
@@ -15,7 +14,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -220,7 +218,12 @@ public class ManipuladorArquivo {
         itensTreemap = new TreeMapItem[totalItens];
         for (int i = 0; i < totalItens; i++) {
             String[] dadosLinha = getDadosLinha(i + 2);
-            TreeMapItem itemLocal = new TreeMapItem();
+            TreeMapItem itemLocal = null;
+            try {
+                itemLocal = new TreeMapItem(1, 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             for (int j = 0; j < dadosLinha.length; j++) {
                 itemLocal.getMapaDetalhesItem().put(getColunas()[j], dadosLinha[j]);
             }
@@ -229,7 +232,8 @@ public class ManipuladorArquivo {
     }
 
     /**
-     * @return Total de linhas do arquivo, incluindo cabeçalho e linha de tipos (caso tenha)
+     * @return Total de linhas do arquivo, incluindo cabeçalho e linha de tipos
+     * (caso tenha)
      */
     public String[] getLinhas() {
         return linhas;

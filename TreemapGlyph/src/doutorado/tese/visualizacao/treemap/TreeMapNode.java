@@ -34,12 +34,8 @@ public abstract class TreeMapNode implements TMModelNode{
     private boolean hasChildren;
     protected HashMap<Coluna, String> mapaDetalhesItem;
     protected Rect bordaInterna;
-//    int borderWidth = 2;
-//    int drawIniY = 20;//x inicial para desenhar
-//    ArrayList<TreeMapNode> itemsFilhos;
     private TMModelUpdater updater = null; // the updater for this node
     protected List<TreeMapNode> children;
-//    private TreeMapNode nodo = null;
     private TreeMapNode parent = null;
 
     public void setDepth(int depth) {
@@ -160,14 +156,6 @@ public abstract class TreeMapNode implements TMModelNode{
 
     public abstract void inserirFilhos(Queue<String> hierarquia, TreeMapNode item, TreeMapNode pai);
 
-//    public void redefinirBorda() {
-//        int x = (int) Math.round(this.bounds.x) + this.borderWidth;
-//        int y = (int) Math.round(this.bounds.y) + this.drawIniY;
-//        int width = (int) Math.round(this.bounds.w) - (2 * this.borderWidth);
-//        int height = (int) Math.round(this.bounds.h) - this.drawIniY - this.borderWidth;
-//        setBordaInterna(new Rect(x, y, width, height));
-//    }
-
     /**
      * @return the hasChildren
      */
@@ -185,7 +173,6 @@ public abstract class TreeMapNode implements TMModelNode{
                 filho.organize();
             }
             QuickSort.sortDescending(this.getChildren());
-//            this.bubbleSort(this.getItemsFilhos());
         }
         return this.getChildren();
     }

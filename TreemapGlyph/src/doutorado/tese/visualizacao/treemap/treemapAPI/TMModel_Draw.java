@@ -24,7 +24,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package Tree;
+package doutorado.tese.visualizacao.treemap.treemapAPI;
 
 import doutorado.tese.visualizacao.treemap.TreeMapNode;
 import java.awt.Color;
@@ -80,7 +80,7 @@ public class TMModel_Draw
             } else if (diff <= 31536000000L) { // less than a year
                 return Color.red;
             } else { // more than a year
-                return Color.white;
+                return Color.decode("#F0F8FF");
             }
         }
         return Color.black;
@@ -96,7 +96,8 @@ public class TMModel_Draw
 //            String date = df.format(new Date(modTime));
 //            String time = tf.format(new Date(modTime));
 
-            String tooltip = "<html>" + name + "<p>";
+            String tooltip = "<html>" + name + "<p>"
+                    +n.getBounds();
             return tooltip;
         }
         return "";

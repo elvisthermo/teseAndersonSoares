@@ -82,8 +82,8 @@ public class StarGlyph {
 
     private int encontrarMaiorRaio() {
         Point center = getCenter();
-        int bordaW = (int) Math.round(rect.w) - 2;
-        int bordaH = (int) Math.round(rect.h) - 2;
+        int bordaW = (int) Math.round(rect.width) - 2;
+        int bordaH = (int) Math.round(rect.height) - 2;
 
         int raio = center.x - bordaW;
         int maiorRaio = raio;
@@ -149,8 +149,8 @@ public class StarGlyph {
     }
 
     private Point getCenter() {
-        int width = (int) Math.round(rect.w) - 1;
-        int height = (int) Math.round(rect.h) - 1;
+        int width = (int) Math.round(rect.width) - 1;
+        int height = (int) Math.round(rect.height) - 1;
 
         int halfWidth = width / 2;
         int halfHeight = height / 2;

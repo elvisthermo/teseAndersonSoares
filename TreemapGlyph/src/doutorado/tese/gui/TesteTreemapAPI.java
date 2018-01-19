@@ -5,8 +5,6 @@
  */
 package doutorado.tese.gui;
 
-import com.macrofocus.treemap.AlgorithmFactory;
-import com.macrofocus.treemap.TreeMap;
 import doutorado.tese.io.ManipuladorArquivo;
 import java.io.File;
 import javax.swing.JFrame;
@@ -45,23 +43,23 @@ public class TesteTreemapAPI {
         };
 
         // Creating the TreeMap
-        TreeMap treeMap = new TreeMap(tableModel);
-        try {
-            // Tuning the appearance of the TreeMap
-            treeMap.setAlgorithm(AlgorithmFactory.SQUARIFIED);
-            treeMap.setSizeByName("PESO");
-            treeMap.setColor(3);
-            treeMap.setBackgroundByName("MARCA");
-            treeMap.setLabels();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        TreeMap treeMap = new TreeMap(tableModel);
+//        try {
+//            // Tuning the appearance of the TreeMap
+//            treeMap.setAlgorithm(AlgorithmFactory.SQUARIFIED);
+//            treeMap.setSizeByName("PESO");
+//            treeMap.setColor(3);
+//            treeMap.setBackgroundByName("MARCA");
+//            treeMap.setLabels();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         // Creating a frame to display
         final JFrame frame = new JFrame("Hello from the TreeMap World!");
         frame.setSize(800, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(treeMap);
+//        frame.getContentPane().add(treeMap);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }

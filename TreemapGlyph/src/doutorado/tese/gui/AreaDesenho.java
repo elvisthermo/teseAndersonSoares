@@ -5,15 +5,11 @@
  */
 package doutorado.tese.gui;
 
-import com.macrofocus.treemap.AlgorithmFactory;
-import com.macrofocus.treemap.RenderingFactory;
-import com.macrofocus.treemap.TreeMap;
 import doutorado.tese.io.ManipuladorArquivo;
 import doutorado.tese.util.Flags;
 import doutorado.tese.visualizacao.glyph.Estrela;
 import doutorado.tese.visualizacao.glyph.StarGlyph;
 import doutorado.tese.visualizacao.treemap.TreeMapLevel;
-import doutorado.tese.visualizacao.treemap.TreeMapLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.List;
@@ -26,17 +22,18 @@ import javax.swing.table.TableModel;
  *
  * @author Anderson
  */
+@Deprecated
 public class AreaDesenho extends JLabel {
 
     private int quantVarStarGlyph;
-    private TreeMapLayout algorithm;
+//    private TreeMapLayout algorithm;
     private TreeMapLevel treemapLevel;
     private int[] dadosTamanho;
     private String[] dadosLegenda;
     private Estrela[] estrelas;
     private StarGlyph[] starGlyphs;
     Treemap treemap;
-    TreeMapLayout squarifier;
+//    TreeMapLayout squarifier;
     ManipuladorArquivo manipulador;
 
     public AreaDesenho(int w, int h,
@@ -80,26 +77,26 @@ public class AreaDesenho extends JLabel {
         setVisible(true);
     }
 
-    public TreeMap loadTreemap(String itemTamanho, String[] itensHierarquia, String itemLegenda, String corColName) {
-        Object[][] matrizDados = manipulador.montarMatrizDados();
-
-        TreeMap treeMap = new TreeMap(criarTableModel(matrizDados));
-
-        // Tuning the appearance of the TreeMap
-        treeMap.setBounds(this.getBounds());
-        treeMap.setAlgorithm(AlgorithmFactory.SQUARIFIED);
-        treeMap.setSizeByName(itemTamanho);
-        treeMap.setGroupByByNames(itensHierarquia);
-        treeMap.setColorByName(corColName);
-//        treeMap.getModel().
-        if (Flags.isShowLegenda()) {
-            treeMap.setBackgroundByName(itemLegenda);
-        }
-        treeMap.setLabels();
-        treeMap.getView().setShowTiming(true);
-        treeMap.getModel().getSettings().setRendering(RenderingFactory.FLAT);
-        return treeMap;
-    }
+//    public TreeMap loadTreemap(String itemTamanho, String[] itensHierarquia, String itemLegenda, String corColName) {
+//        Object[][] matrizDados = manipulador.montarMatrizDados();
+//
+//        TreeMap treeMap = new TreeMap(criarTableModel(matrizDados));
+//
+//        // Tuning the appearance of the TreeMap
+//        treeMap.setBounds(this.getBounds());
+//        treeMap.setAlgorithm(AlgorithmFactory.SQUARIFIED);
+//        treeMap.setSizeByName(itemTamanho);
+//        treeMap.setGroupByByNames(itensHierarquia);
+//        treeMap.setColorByName(corColName);
+////        treeMap.getModel().
+//        if (Flags.isShowLegenda()) {
+//            treeMap.setBackgroundByName(itemLegenda);
+//        }
+//        treeMap.setLabels();
+//        treeMap.getView().setShowTiming(true);
+//        treeMap.getModel().getSettings().setRendering(RenderingFactory.FLAT);
+//        return treeMap;
+//    }
 
     @Override
     public void paint(Graphics g) {

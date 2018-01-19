@@ -7,7 +7,7 @@ package doutorado.tese.visualizacao.treemap;
 
 import doutorado.tese.io.ManipuladorArquivo;
 import doutorado.tese.util.Coluna;
-import doutorado.tese.visualizacao.treemap.layout.Squarify;
+//import doutorado.tese.visualizacao.treemap.layout.Squarify;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -24,11 +24,11 @@ public class Treemap {
     ManipuladorArquivo manipulador;
     private TreeMapNode root;
     Queue<String> hierarquiaFila;
-    TreeMapLayout squarifier;
+//    TreeMapLayout squarifier;
     String sizeColumn = "";
     String labelColumn = "";
     String colorColumn = "";
-    private Squarify layout;
+//    private Squarify layout;
 
     public Treemap(ManipuladorArquivo manipulador, Rect rect) {
         this.manipulador = manipulador;

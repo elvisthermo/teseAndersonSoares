@@ -12,7 +12,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Queue;
-import java.util.stream.IntStream;
 
 /**
  * Simple Map Model
@@ -24,47 +23,13 @@ public class TreeMapLevel extends TreeMapNode {
 
     public TreeMapLevel(Rect rect) {
         this.bounds = rect;
-        totalArea = bounds.w * bounds.h;
+        totalArea = bounds.width * bounds.height;
         children = new ArrayList<>();
         bordaInterna = rect;
     }
 
     public TreeMapLevel() {
         children = new ArrayList<>();
-    }
-
-    /**
-     * Creates a Map Model instance based on the relative size of the mappable
-     * itemsFilhos and the frame size.
-     *
-     * @param valoresItens Items representing relative areas
-     * @param width Width of the display area
-     * @param height Height of the display area
-     */
-    public TreeMapLevel(int[] valoresItens, int width, int height) {
-        children = new ArrayList<>(valoresItens.length);
-        totalArea = width * height;
-        double sum = IntStream.of(valoresItens).sum();
-
-        for (int i = 0; i < children.size(); i++) {
-            children.add(new TreeMapItem(totalArea / sum * valoresItens[i], 0));
-//            System.out.println(itemsFilhos[i]);
-        }
-    }
-
-    /**
-     * Creates a Map Model instance based on the relative size of the mappable
-     * itemsFilhos and the frame size.
-     *
-     * @param filhosItens itens filhos desse MapLevel
-     * @param bounds
-     * @param raiz
-     */
-    public TreeMapLevel(TreeMapNode[] filhosItens, Rect bounds, boolean raiz) {
-//        setItemsFilhos(itemsFilhos);
-        this.bounds = bounds;
-        totalArea = bounds.w * bounds.h;
-        this.setRaiz(raiz);
     }
 
     @Override
@@ -81,9 +46,8 @@ public class TreeMapLevel extends TreeMapNode {
                 }
             }
             if (treeMapNode == null) {
-//                treeMapNode = new TreeMapLevel(bounds);
-                //TODO verificar se aqui nao dá pra setar o tamanhos dos itens da API Treemap
-                treeMapNode = new TreeMapLevel();
+                treeMapNode = new TreeMapLevel(bounds);
+//                treeMapNode = new TreeMapLevel();
                 treeMapNode.setLabel(item.getMapaDetalhesItem().get(ManipuladorArquivo.getColuna(hierarquia.peek())));
                 pai.getChildren().add(treeMapNode);
                 treeMapNode.setPaiLevel(pai);
@@ -95,14 +59,6 @@ public class TreeMapLevel extends TreeMapNode {
         }
     }
 
-//    public void setItemsFilhos(ArrayList<TreeMapNode> itemsFilhos) {
-//        this.itemsFilhos = itemsFilhos;
-//    }
-//
-//    @Override
-//    public ArrayList<TreeMapNode> getItemsFilhos() {
-//        return itemsFilhos;
-//    }
     /**
      * @return the folha
      */
@@ -126,9 +82,6 @@ public class TreeMapLevel extends TreeMapNode {
         this.size = sum;
     }
 
-//    public void setSize(Double tamanho) {
-//        this.size = tamanho;
-//    }
     @Override
     public double getSize() {
         return size;
@@ -147,16 +100,15 @@ public class TreeMapLevel extends TreeMapNode {
         g2d.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
         int[] tamanhoTexto = mensurarTexto(g2d, this.getLabel());
 
-        if (tamanhoTexto[0] >= level.bounds.w) {
-//            System.out.println(level.label+" - wTexto: "+tamanhoTexto[0]+" > "+level.bounds.w);
-            int[] conf = verifyFontCanvasSize(g2d, this.getLabel(), tamanhoTexto[0], (int) Math.round(this.getBounds().w), fontSize);
+        if (tamanhoTexto[0] >= level.bounds.width) {
+            int[] conf = verifyFontCanvasSize(g2d, this.getLabel(), tamanhoTexto[0], (int) Math.round(this.getBounds().width), fontSize);
             tamanhoTexto[0] = conf[0];
             fontSize = conf[1];
         }
         g2d.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, fontSize));
         tamanhoTexto = mensurarTexto(g2d, this.getLabel());
 
-        int xTexto = (int) ((level.bounds.w / 2) + level.bounds.x) - (tamanhoTexto[0] / 2);
+        int xTexto = (int) ((level.bounds.width / 2) + level.bounds.x) - (tamanhoTexto[0] / 2);
         int yTexto = (int) level.bounds.y + 15;//(int) Math.round(this.getBordaInterna().y) - 4;
         return new Point(xTexto, yTexto);
     }
@@ -167,26 +119,6 @@ public class TreeMapLevel extends TreeMapNode {
         return new int[]{lWidth, lHeight};
     }
 
-//    @Override
-//    public void paint(Graphics2D g) {
-//        //desenhar nodo level
-//        g.drawRect((int) Math.round(this.bounds.x), (int) Math.round(this.bounds.y),
-//                (int) Math.round(this.bounds.w) - 1, (int) Math.round(this.bounds.h) - 1);
-//
-////        redefinirBorda();
-//        g.setColor(Color.black);
-//        //desenha a borda interna
-//        System.out.println("Label: " + this.getLabel() + "\t" + getBordaInterna());
-//        g.drawRect((int) Math.round(getBordaInterna().x), (int) Math.round(getBordaInterna().y),
-//                (int) Math.round(getBordaInterna().w), (int) Math.round(getBordaInterna().h));
-//        g.drawString("(" + (int) Math.round(getBordaInterna().x) + "," + (int) Math.round(getBordaInterna().y) + ")",
-//                (int) Math.round(getBordaInterna().x), (int) Math.round(getBordaInterna().y));
-////        calcularPosicaoLabel(g, this);
-//
-//        for (TreeMapNode itemsFilho : children) {
-//            itemsFilho.paint(g);
-//        }
-//    }
     @Override
     public String toString() {
         return super.toString(); //To change body of generated methods, choose Tools | Templates.

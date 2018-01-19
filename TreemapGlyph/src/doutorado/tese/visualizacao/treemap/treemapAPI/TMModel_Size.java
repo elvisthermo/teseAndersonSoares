@@ -24,7 +24,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package Tree;
+package doutorado.tese.visualizacao.treemap.treemapAPI;
 
 import doutorado.tese.visualizacao.treemap.TreeMapNode;
 

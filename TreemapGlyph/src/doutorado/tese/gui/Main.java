@@ -302,22 +302,25 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         String[] itensHierarquia = parseListString2Vetor(hierarquiaList.getSelectedValuesList());
         List<String> variaveisStarGlyph = variaveisStarList.getSelectedValuesList();
 
-//        AreaDesenho areaDesenho = new AreaDesenho(painelEsquerda.getWidth(), painelEsquerda.getHeight(),
-//                variaveisStarGlyph, manipulador);
-        //API Macrofocus
-//        TreeMap treemapInfoVis = areaDesenho.loadTreemap(itemTamanho, itensHierarquia, itemLegenda, "");
-                
-//        treemapInfoVis.getModel().getSettings().
-        
-//        painelEsquerda.add(areaDesenho);
-//        painelEsquerda.add(treemapInfoVis);
-
         VisualizationsArea v = new VisualizationsArea(painelEsquerda.getWidth(), painelEsquerda.getHeight(),
                 manipulador, itemTamanho, itensHierarquia, itemLegenda, variaveisStarGlyph);
         painelEsquerda.add(v.getView());
         painelEsquerda.repaint();
         prepararLegendaStarGlyph(variaveisStarGlyph);
         progressoBarra.setVisible(false);
+        
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(10000);
+//                } catch (InterruptedException ex) {
+//                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                v.teste();
+//            }
+//        }).start();;
+        
     }//GEN-LAST:event_botaoGerarTreemapActionPerformed
 
     private void checkStarGlyphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkStarGlyphActionPerformed
@@ -483,7 +486,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
             case 3:
                 try {
                     manipulador.carregarItensTreemap();
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
                 porcentagem = (ordem * 100) / tarefas;

@@ -28,8 +28,8 @@ public class Estrela {
     }
 
     public void montarEstrela() {
-        int width = (int) Math.round(rect.w)- 1;
-        int height = (int) Math.round(rect.h) - 1;
+        int width = (int) Math.round(rect.width)- 1;
+        int height = (int) Math.round(rect.height) - 1;
 
         int halfWidth = width / 2;
         int halfHeight = height / 2;

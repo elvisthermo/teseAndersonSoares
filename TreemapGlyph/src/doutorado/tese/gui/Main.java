@@ -20,10 +20,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -50,6 +53,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         initComponents();
+
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     }
 
@@ -83,6 +87,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         progressoBarra = new javax.swing.JProgressBar();
         jScrollPane3 = new javax.swing.JScrollPane();
         hierarquiaList = new javax.swing.JList<>();
+        addGlyphButton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         fileMenuItem = new javax.swing.JMenuItem();
@@ -173,6 +178,13 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         });
         jScrollPane3.setViewportView(hierarquiaList);
 
+        addGlyphButton.setText("Add Glyph");
+        addGlyphButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addGlyphButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelDireitaLayout = new javax.swing.GroupLayout(painelDireita);
         painelDireita.setLayout(painelDireitaLayout);
         painelDireitaLayout.setHorizontalGroup(
@@ -205,7 +217,9 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
                         .addGroup(painelDireitaLayout.createSequentialGroup()
                             .addComponent(checkStarGlyph)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(checkGlyph, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(checkGlyph, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(addGlyphButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jSeparator3))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelDireitaLayout.createSequentialGroup()
                         .addGroup(painelDireitaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -227,7 +241,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
                 .addGroup(painelDireitaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(painelDireitaLayout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(0, 91, Short.MAX_VALUE))
+                        .addGap(0, 83, Short.MAX_VALUE))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(painelDireitaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -240,7 +254,8 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(painelDireitaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(checkStarGlyph)
-                    .addComponent(checkGlyph))
+                    .addComponent(checkGlyph)
+                    .addComponent(addGlyphButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -305,22 +320,11 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         VisualizationsArea v = new VisualizationsArea(painelEsquerda.getWidth(), painelEsquerda.getHeight(),
                 manipulador, itemTamanho, itensHierarquia, itemLegenda, variaveisStarGlyph);
         painelEsquerda.add(v.getView());
-        painelEsquerda.repaint();
+
+//        painelEsquerda.repaint();
         prepararLegendaStarGlyph(variaveisStarGlyph);
         progressoBarra.setVisible(false);
-        
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Thread.sleep(10000);
-//                } catch (InterruptedException ex) {
-//                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//                v.teste();
-//            }
-//        }).start();;
-        
+
     }//GEN-LAST:event_botaoGerarTreemapActionPerformed
 
     private void checkStarGlyphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkStarGlyphActionPerformed
@@ -345,9 +349,9 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
 
     private void checkGlyphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkGlyphActionPerformed
         if (checkGlyph.isSelected()) {
-            Flags.setShowGlyph(true);            
+            Flags.setShowGlyph(true);
         } else {
-            Flags.setShowGlyph(false);            
+            Flags.setShowGlyph(false);
         }
     }//GEN-LAST:event_checkGlyphActionPerformed
 
@@ -369,6 +373,30 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
             task.execute();
         }
     }//GEN-LAST:event_fileMenuItemActionPerformed
+
+    private void addGlyphButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGlyphButtonActionPerformed
+        TestFxIntoSwing fx = new TestFxIntoSwing();
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                fxPanel = new JFXPanel();
+                fxPanel.setBounds(0, 0, 998, 691);
+                fxPanel.setVisible(true);
+                painelEsquerda.add(fxPanel);
+                painelEsquerda.repaint();
+                
+                
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        fx.getPanelFx(fxPanel);
+                    }
+                });
+            }
+        });
+
+    }//GEN-LAST:event_addGlyphButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -401,6 +429,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
+    private javax.swing.JButton addGlyphButton;
     private javax.swing.JButton botaoGerarTreemap;
     private javax.swing.JCheckBox checkGlyph;
     private javax.swing.JCheckBox checkLegenda;
@@ -430,6 +459,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
     private ManipuladorArquivo manipulador;
     private File selectedFile;
     private Task task;
+    private JFXPanel fxPanel;
 
     class Task extends SwingWorker<Void, Void> {
 
@@ -563,7 +593,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
     private void atualizarComboBox(JComboBox comboBox, List<String> itens) {
         Object[] items = itens.toArray();
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
-        comboBox.setModel(model);        
+        comboBox.setModel(model);
     }
 
     private void loadVariaveisStartGlyph() {

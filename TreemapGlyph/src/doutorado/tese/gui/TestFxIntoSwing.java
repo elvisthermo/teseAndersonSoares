@@ -6,13 +6,11 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
+import javafx.scene.shape.SVGPath;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class TestFxIntoSwing {
-
     private static void initAndShowGUI() {
         // This method is invoked on the EDT thread
         JFrame frame = new JFrame("Swing and JavaFX");
@@ -36,20 +34,39 @@ public class TestFxIntoSwing {
         fxPanel.setScene(scene);
     }
 
+    public JFXPanel getPanelFx(JFXPanel fxPanel) {
+        // This method is invoked on the JavaFX thread
+        System.out.println("Recebendo o fxPanel");
+        Scene scene = createScene();
+        fxPanel.setScene(scene);
+        return fxPanel;
+    }
+    
     private static Scene createScene() {
-        Group  root  =  new  Group();
-        Scene  scene  =  new  Scene(root, Color.ALICEBLUE);
-        Rectangle rectangle = new Rectangle();  
-      
-      //Setting the properties of the rectangle 
-        rectangle.setX(70); 
-        rectangle.setY(150); 
-        rectangle.setWidth(300.0f); 
-        rectangle.setHeight(150.0f); 
+        System.out.println("Criando a cena...");
+        SVGPath svgPath = new SVGPath();
+
+        String path = "M 100 100 L 300 100 L 200 300 z";
+
+        //Setting the SVGPath in the form of string 
+        svgPath.setContent(path);
+
+        //Creating a Group object  
+//        Group root = new Group(svgPath);
+        Group root = new Group();
+        root.getChildren().add(svgPath);
+        Scene scene = new Scene(root, Color.ALICEBLUE);
+        Rectangle rectangle = new Rectangle();
+
+        //Setting the properties of the rectangle 
+        rectangle.setX(170);
+        rectangle.setY(150);
+        rectangle.setWidth(300.0f);
+        rectangle.setHeight(150.0f);
 
         root.getChildren().add(rectangle);
-
-        return (scene);
+        System.out.println("cena criada...");
+        return scene;
     }
     
     public static void main(String[] args) {

@@ -5,7 +5,6 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -16,7 +15,7 @@ public class TestFxIntoSwing {
         JFrame frame = new JFrame("Swing and JavaFX");
         final JFXPanel fxPanel = new JFXPanel();
         frame.add(fxPanel);
-        frame.setSize(500, 500);
+        frame.setSize(250, 350);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -34,7 +33,7 @@ public class TestFxIntoSwing {
         fxPanel.setScene(scene);
     }
 
-    public JFXPanel getPanelFx(JFXPanel fxPanel) {
+    public static JFXPanel getPanelFx(JFXPanel fxPanel) {
         // This method is invoked on the JavaFX thread
         System.out.println("Recebendo o fxPanel");
         Scene scene = createScene();
@@ -56,16 +55,7 @@ public class TestFxIntoSwing {
         Group root = new Group();
         root.getChildren().add(svgPath);
         Scene scene = new Scene(root, Color.ALICEBLUE);
-        Rectangle rectangle = new Rectangle();
-
-        //Setting the properties of the rectangle 
-        rectangle.setX(170);
-        rectangle.setY(150);
-        rectangle.setWidth(300.0f);
-        rectangle.setHeight(150.0f);
-
-        root.getChildren().add(rectangle);
-        System.out.println("cena criada...");
+        
         return scene;
     }
     

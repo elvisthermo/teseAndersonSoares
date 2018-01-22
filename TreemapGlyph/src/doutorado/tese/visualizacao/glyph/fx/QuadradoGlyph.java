@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package doutorado.tese.visualizacao.glyph;
+package doutorado.tese.visualizacao.glyph.fx;
 
 /**
  *
- * @author thermo
+ * @author Anderson Soares
  */
-class CustomNode {
+public class QuadradoGlyph {
     
 }

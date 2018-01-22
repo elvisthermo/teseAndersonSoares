@@ -1,4 +1,4 @@
-package doutorado.tese.visualizacao.glyph;
+package doutorado.tese.visualizacao.glyph.fx;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import javafx.scene.chart.*;
 import javafx.scene.Group;
  
-public class glphyPieChart extends Application {
+public class PieChartGlphy extends Application {
  
     
     @Override public void start(Stage stage) {

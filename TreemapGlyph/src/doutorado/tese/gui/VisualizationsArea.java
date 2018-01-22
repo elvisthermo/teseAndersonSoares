@@ -10,6 +10,7 @@ import doutorado.tese.visualizacao.treemap.treemapAPI.TMModel_Size;
 import doutorado.tese.io.ManipuladorArquivo;
 import doutorado.tese.util.Coluna;
 import doutorado.tese.util.Flags;
+import doutorado.tese.visualizacao.glyph.fx.ManagerGlyph;
 import doutorado.tese.visualizacao.treemap.Rect;
 import doutorado.tese.visualizacao.treemap.TreeMapItem;
 import doutorado.tese.visualizacao.treemap.TreeMapLevel;
@@ -18,13 +19,13 @@ import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Observable;
 import java.util.Queue;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import net.bouthier.treemapAWT.TMModelNode;
 import net.bouthier.treemapAWT.TMOnDrawFinished;
 import net.bouthier.treemapAWT.TMNodeModel;
 import net.bouthier.treemapAWT.TMThreadModel;
-import net.bouthier.treemapAWT.TMUpdater;
 import net.bouthier.treemapAWT.TMUpdaterConcrete;
 import net.bouthier.treemapAWT.TMView;
 import net.bouthier.treemapAWT.TreeMap;
@@ -70,15 +71,30 @@ public class VisualizationsArea {
         TMOnDrawFinished listener = (new TMOnDrawFinished() {
             @Override
             public void onDrawFinished(String t) {
-                teste(t);
+                getRootBoundsFromView(t);
             }
         });
         TMThreadModel.listener = listener;
         TMUpdaterConcrete.listener = listener;
-
+        acionarGLyphFX();
     }
 
-    public void teste(String t) {
+    public void acionarGLyphFX() {//chamado de dentro do swing para acionar as coisas do Fx
+        JFXPanel fxPanelGlyph = new JFXPanel();
+        this.view.add(fxPanelGlyph);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+//                //o que for do javafx vai aqui
+//                fxPanelGlyph.setBounds(0, 0, 50, 50);
+//                fxPanelGlyph.setVisible(true);
+                ManagerGlyph.getPanelFx(fxPanelGlyph);
+            }
+        });
+    }
+
+    public void getRootBoundsFromView(String t) {
         TMNodeModel m = this.view.getAlgorithm().getRoot();//TMNodeMode
         if (m != null) {
             Rectangle area = m.getArea();

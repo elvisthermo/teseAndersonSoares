@@ -9,6 +9,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 /**
  *
@@ -21,19 +22,21 @@ public class ManagerGlyph {
      * @param fxPanel
      * @return The JFXPanel with glyphs
      */
-    public static JFXPanel getPanelFx(JFXPanel fxPanel) {
+    public static JFXPanel getPanelFx(JFXPanel fxPanel,Stage stage) {
         // This method is invoked on the JavaFX thread
         Scene scene = createScene();
         fxPanel.setScene(scene);
+        fxPanel.getBackground().getTransparency();
         return fxPanel;
     }
     
     private static Scene createScene() {
         //Creating a Group object  
         Group root = new Group();
-        root.getChildren().add(TrianguloGlyph.createSVG());
-        root.getChildren().add(QuadradoGlyph.createSVG());
-        Scene scene = new Scene(root, Color.ALICEBLUE);
+        
+        root.getChildren().add(TrianguloGlyph.createSVG(100,300,100,220));
+        //root.getChildren().add(QuadradoGlyph.createSVG());
+        Scene scene = new Scene(root);
         
         return scene;
     }

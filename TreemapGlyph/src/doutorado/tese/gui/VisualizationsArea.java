@@ -84,7 +84,7 @@ public class VisualizationsArea {
         if (Flags.isShowStarGlyph()) {
             acionarStarGlyph(variaveisStarGlyph);
         }
-//        acionarGLyphFX();
+       acionarGLyphFX();
     }
 
     public void acionarStarGlyph(List<String> variaveisStarGlyph) {
@@ -109,7 +109,7 @@ public class VisualizationsArea {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {//o que for do javafx vai aqui
-                ManagerGlyph.getPanelFx(fxPanelGlyph);
+                ManagerGlyph.getPanelFx(fxPanelGlyph.getScene(). );
             }
         });
     }
@@ -121,6 +121,8 @@ public class VisualizationsArea {
             this.root.setBounds(area);
 
             setAreaNodesTree(this.root, nodeModel);
+            
+            
         }
     }
 

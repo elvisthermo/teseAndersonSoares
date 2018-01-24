@@ -10,11 +10,13 @@ import doutorado.tese.visualizacao.treemap.treemapAPI.TMModel_Size;
 import doutorado.tese.io.ManipuladorArquivo;
 import doutorado.tese.util.Coluna;
 import doutorado.tese.util.Flags;
+import doutorado.tese.visualizacao.glyph.StarGlyph;
 import doutorado.tese.visualizacao.glyph.fx.ManagerGlyph;
 import doutorado.tese.visualizacao.treemap.Rect;
 import doutorado.tese.visualizacao.treemap.TreeMapItem;
 import doutorado.tese.visualizacao.treemap.TreeMapLevel;
 import doutorado.tese.visualizacao.treemap.TreeMapNode;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -23,8 +25,10 @@ import java.util.Queue;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import net.bouthier.treemapAWT.TMModelNode;
+import net.bouthier.treemapAWT.TMNode;
 import net.bouthier.treemapAWT.TMOnDrawFinished;
 import net.bouthier.treemapAWT.TMNodeModel;
+import net.bouthier.treemapAWT.TMNodeModelComposite;
 import net.bouthier.treemapAWT.TMThreadModel;
 import net.bouthier.treemapAWT.TMUpdaterConcrete;
 import net.bouthier.treemapAWT.TMView;
@@ -44,6 +48,8 @@ public class VisualizationsArea {
     private TMModelNode modelTree = null; // the model of the demo tree
     private TreeMap treeMap = null; // the treemap builded
     private TMView view = null;
+    //Star Glyph
+    private StarGlyph[] starGlyphs;
 
     public VisualizationsArea(int w, int h, ManipuladorArquivo manipulador,
             String itemTamanho, String[] itensHierarquia, String itemLegenda,
@@ -56,15 +62,14 @@ public class VisualizationsArea {
         root.setPaiLevel(null);
         root.setRaiz(true);
         root.setLabel("ROOT");
-
+        //é possivel imprimir a arvore chamando o metodo printTree()
         modelTree = createTree(itensHierarquia, itemTamanho, itemLegenda);
-//        printTree(model, "\t");
         treeMap = new TreeMap(modelTree);
 
         TMModel_Size cSize = new TMModel_Size();
         TMModel_Draw cDraw = new TMModel_Draw();
 
-        this.view = treeMap.getView(cSize, cDraw);
+        this.view = treeMap.getView(cSize, cDraw);//getView() retorna um JPainel
 
         this.view.getAlgorithm().setBorderSize(15);
         this.view.setBounds(rect);
@@ -76,7 +81,25 @@ public class VisualizationsArea {
         });
         TMThreadModel.listener = listener;
         TMUpdaterConcrete.listener = listener;
-        acionarGLyphFX();
+        if (Flags.isShowStarGlyph()) {
+            acionarStarGlyph(variaveisStarGlyph);
+        }
+//        acionarGLyphFX();
+    }
+
+    public void acionarStarGlyph(List<String> variaveisStarGlyph) {
+        starGlyphs = new StarGlyph[manipulador.getItensTreemap().length];
+        for (int i = 0; i < manipulador.getItensTreemap().length; i++) {
+//            estrelas[i] = new Estrela(treemap.getRoot().getItemsFilhos().get(i).getBounds());
+            StarGlyph starGlyph = new StarGlyph(manipulador.getItensTreemap()[i].getBounds(), variaveisStarGlyph);
+//            System.out.println("Item: " + manipulador.getItensTreemap()[i].getLabel()+
+//                    "Pai: "+manipulador.getItensTreemap()[i].getPaiLevel());
+            starGlyph.setQuantVar(variaveisStarGlyph.size());
+            starGlyph.setManipulador(manipulador);
+            starGlyphs[i] = starGlyph;
+            this.view.add(starGlyphs[i]);
+        }
+        this.view.repaint();
     }
 
     public void acionarGLyphFX() {//chamado de dentro do swing para acionar as coisas do Fx
@@ -85,21 +108,34 @@ public class VisualizationsArea {
 
         Platform.runLater(new Runnable() {
             @Override
-            public void run() {
-//                //o que for do javafx vai aqui
-//                fxPanelGlyph.setBounds(0, 0, 50, 50);
-//                fxPanelGlyph.setVisible(true);
+            public void run() {//o que for do javafx vai aqui
                 ManagerGlyph.getPanelFx(fxPanelGlyph);
             }
         });
     }
 
     public void getRootBoundsFromView(String t) {
-        TMNodeModel m = this.view.getAlgorithm().getRoot();//TMNodeMode
-        if (m != null) {
-            Rectangle area = m.getArea();
-            System.out.println("veio daqui: " + t);
-            System.out.println("x:" + m.getArea().x + "y:" + m.getArea().y + "w:" + m.getArea().width + "h:" + m.getArea().height);
+        TMNodeModel nodeModel = this.view.getAlgorithm().getRoot();//TMNodeMode
+        if (nodeModel != null) {
+            Rectangle area = nodeModel.getArea();
+            this.root.setBounds(area);
+
+            setAreaNodesTree(this.root, nodeModel);
+        }
+    }
+
+    public void setAreaNodesTree(TMModelNode item, TMNodeModel nodoModel) {
+        TreeMapNode nodo = (TreeMapNode) item;
+        for (int i = 0; i < nodo.getChildren().size(); i++) {
+
+            TreeMapNode filho = nodo.getChildren().get(i);
+
+            TMNodeModel filhoModel = ((TMNodeModelComposite) nodoModel).getChildrenList().get(i);
+
+            filho.setBounds(filhoModel.getArea());
+            filho.setLabel(filhoModel.getTitle());
+            System.out.println("Titulo: "+filho.getLabel()+" - "+filho.getBounds());
+            setAreaNodesTree(filho, filhoModel);
         }
     }
 

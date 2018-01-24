@@ -9,6 +9,7 @@ import doutorado.tese.organize.QuickSort;
 import doutorado.tese.util.Coluna;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ import net.bouthier.treemapAWT.TMModelUpdater;
 public abstract class TreeMapNode implements TMModelNode{
 
     double size;
-    Rect bounds;
+    Rectangle bounds;
     int classificationOrder = 0;
     int depth;
     TreeMapNode paiLevel;
@@ -33,7 +34,7 @@ public abstract class TreeMapNode implements TMModelNode{
     private boolean useLabel = false;
     private boolean hasChildren;
     protected HashMap<Coluna, String> mapaDetalhesItem;
-    protected Rect bordaInterna;
+    protected Rectangle bordaInterna;
     private TMModelUpdater updater = null; // the updater for this node
     protected List<TreeMapNode> children;
     private TreeMapNode parent = null;
@@ -58,11 +59,11 @@ public abstract class TreeMapNode implements TMModelNode{
         this.size = tamanho;
     }
 
-    public Rect getBounds() {
+    public Rectangle getBounds() {
         return bounds;
     }
 
-    public void setBounds(Rect bounds) {
+    public void setBounds(Rectangle bounds) {
         this.bounds = bounds;
     }
 
@@ -180,7 +181,7 @@ public abstract class TreeMapNode implements TMModelNode{
     /**
      * @return the bordaInterna
      */
-    public Rect getBordaInterna() {
+    public Rectangle getBordaInterna() {
         return bordaInterna;
     }
 

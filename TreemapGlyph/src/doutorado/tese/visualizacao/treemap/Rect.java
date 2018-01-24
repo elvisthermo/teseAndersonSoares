@@ -7,7 +7,7 @@ package doutorado.tese.visualizacao.treemap;
 
 import java.awt.Rectangle;
 
-public final class Rect extends Rectangle{
+public class Rect extends Rectangle{
 //    public double x, y, w, h;
 //    public String label;
 

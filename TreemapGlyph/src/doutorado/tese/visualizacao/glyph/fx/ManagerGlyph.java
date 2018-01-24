@@ -9,7 +9,6 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 
 /**
  *
@@ -33,6 +32,7 @@ public class ManagerGlyph {
         //Creating a Group object  
         Group root = new Group();
         root.getChildren().add(TrianguloGlyph.createSVG());
+        root.getChildren().add(QuadradoGlyph.createSVG());
         Scene scene = new Scene(root, Color.ALICEBLUE);
         
         return scene;

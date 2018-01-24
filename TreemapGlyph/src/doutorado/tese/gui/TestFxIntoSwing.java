@@ -1,5 +1,6 @@
 package doutorado.tese.gui;
 
+import doutorado.tese.visualizacao.glyph.fx.QuadradoGlyph;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
@@ -43,17 +44,17 @@ public class TestFxIntoSwing {
     
     private static Scene createScene() {
         System.out.println("Criando a cena...");
-        SVGPath svgPath = new SVGPath();
-
-        String path = "M 100 100 L 300 100 L 200 300 z";
-
-        //Setting the SVGPath in the form of string 
-        svgPath.setContent(path);
+//        SVGPath svgPath = new SVGPath();
+//
+//        String path = "M 100 100 L 300 100 L 200 300 z";
+//
+//        //Setting the SVGPath in the form of string 
+//        svgPath.setContent(path);
 
         //Creating a Group object  
 //        Group root = new Group(svgPath);
         Group root = new Group();
-        root.getChildren().add(svgPath);
+        root.getChildren().add(QuadradoGlyph.createSVG());
         Scene scene = new Scene(root, Color.ALICEBLUE);
         
         return scene;

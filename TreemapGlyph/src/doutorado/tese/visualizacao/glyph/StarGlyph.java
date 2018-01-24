@@ -8,21 +8,22 @@ package doutorado.tese.visualizacao.glyph;
 import doutorado.tese.io.ManipuladorArquivo;
 import doutorado.tese.util.Coluna;
 import doutorado.tese.util.Flags;
-import doutorado.tese.visualizacao.treemap.Rect;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.List;
+import javax.swing.JLabel;
 
 /**
  *
  * @author Anderson
  */
-public class StarGlyph {
+public class StarGlyph extends JLabel{
 
-    private Rect rect;
+    private Rectangle rect;
     private int pontoMedioX, pontoMedioY;
     private int quantVar;
     private double r;
@@ -32,7 +33,7 @@ public class StarGlyph {
     private ManipuladorArquivo manipulador;
     private int numLinha = 2;
 
-    public StarGlyph(Rect r, List<String> variaveisEscolhidasStarGlyph) {
+    public StarGlyph(Rectangle r, List<String> variaveisEscolhidasStarGlyph) {
         this.rect = r;
         this.variaveisEscolhidasStarGlyph = variaveisEscolhidasStarGlyph;
     }
@@ -53,7 +54,9 @@ public class StarGlyph {
         return (porcentagemDado * maiorRaio) / 100;
     }
 
+    @Override
     public void paint(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g.create();
         if (getQuantVar() != 0) {
             anguloAcc = 360 / getQuantVar();
             anguloAlfa = 0;
@@ -67,12 +70,13 @@ public class StarGlyph {
                 double dadoMaxVal = coluna.getMapaMaiorMenor().get(coluna.getName())[0];//0 - maxValue; 1 - minValue
                 double porcentagemDado = calcularPorcentagemDado(dado, dadoMaxVal);
                 r = calcularPorcentagemParaR(porcentagemDado, maiorRaio);
-                g.setColor(Color.decode(Flags.getCor()[i]));
-                desenharEixoPolar(g);
+                g2d.setColor(Color.decode(Flags.getCor()[i]));
+                desenharEixoPolar(g2d);
                 anguloAlfa += anguloAcc;
             }
             numLinha++;
         }
+        g2d.dispose();
     }
 
     public void encontrarPontoCentro(int halfWidth, int width, int halfHeight, int height) {

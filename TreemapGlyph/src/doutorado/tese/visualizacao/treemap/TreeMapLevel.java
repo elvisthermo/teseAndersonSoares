@@ -10,6 +10,7 @@ import doutorado.tese.util.Coluna;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Queue;
 
@@ -21,7 +22,7 @@ public class TreeMapLevel extends TreeMapNode {
 
     double totalArea;
 
-    public TreeMapLevel(Rect rect) {
+    public TreeMapLevel(Rectangle rect) {
         this.bounds = rect;
         totalArea = bounds.width * bounds.height;
         children = new ArrayList<>();

@@ -15,6 +15,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 /**
@@ -35,6 +36,9 @@ public class StarGlyph extends JLabel{
 
     public StarGlyph(Rectangle r, List<String> variaveisEscolhidasStarGlyph) {
         this.rect = r;
+        this.setBounds(r.x + 2, r.y + 2, r.width - 2, r.height - 2);
+//        this.setS
+        this.setBorder(BorderFactory.createLineBorder(Color.red));
         this.variaveisEscolhidasStarGlyph = variaveisEscolhidasStarGlyph;
     }
 

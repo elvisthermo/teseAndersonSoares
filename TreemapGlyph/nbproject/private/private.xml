@@ -4,8 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Anderson%20Soares/Documents/GitHub/teseAndersonSoares/TreemapGlyph/src/doutorado/tese/gui/VisualizationsArea.java</file>
+            <file>file:/C:/Users/Anderson%20Soares/Documents/GitHub/teseAndersonSoares/TreemapGlyph/src/doutorado/tese/visualizacao/glyph/fx/ManagerGlyph.java</file>
             <file>file:/C:/Users/Anderson%20Soares/Documents/GitHub/teseAndersonSoares/TreemapGlyph/src/doutorado/tese/gui/Main.java</file>
+            <file>file:/C:/Users/Anderson%20Soares/Documents/GitHub/teseAndersonSoares/TreemapGlyph/src/doutorado/tese/visualizacao/treemap/Rect.java</file>
             <file>file:/C:/Users/Anderson%20Soares/Documents/GitHub/teseAndersonSoares/TreemapGlyph/src/doutorado/tese/visualizacao/treemap/TreeMapNode.java</file>
+            <file>file:/C:/Users/Anderson%20Soares/Documents/GitHub/teseAndersonSoares/TreemapGlyph/src/doutorado/tese/visualizacao/treemap/treemapAPI/TMModel_Draw.java</file>
         </group>
     </open-files>
 </project-private>

@@ -22,7 +22,7 @@ public class ManagerGlyph {
      * @param fxPanel
      * @return The JFXPanel with glyphs
      */
-    public static JFXPanel getPanelFx(JFXPanel fxPanel,Stage stage) {
+    public static JFXPanel getPanelFx(JFXPanel fxPanel) {
         // This method is invoked on the JavaFX thread
         Scene scene = createScene();
         fxPanel.setScene(scene);

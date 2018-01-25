@@ -84,7 +84,7 @@ public class VisualizationsArea {
         if (Flags.isShowStarGlyph()) {
             acionarStarGlyph(variaveisStarGlyph);
         }
-       acionarGLyphFX();
+        //acionarGLyphFX();
     }
 
     public void acionarStarGlyph(List<String> variaveisStarGlyph) {
@@ -96,6 +96,7 @@ public class VisualizationsArea {
 //                    "Pai: "+manipulador.getItensTreemap()[i].getPaiLevel());
             starGlyph.setQuantVar(variaveisStarGlyph.size());
             starGlyph.setManipulador(manipulador);
+            starGlyph.setVisible(true);
             starGlyphs[i] = starGlyph;
             this.view.add(starGlyphs[i]);
         }
@@ -109,7 +110,7 @@ public class VisualizationsArea {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {//o que for do javafx vai aqui
-                ManagerGlyph.getPanelFx(fxPanelGlyph.getScene(). );
+                ManagerGlyph.getPanelFx(fxPanelGlyph);
             }
         });
     }
@@ -121,24 +122,28 @@ public class VisualizationsArea {
             this.root.setBounds(area);
 
             setAreaNodesTree(this.root, nodeModel);
-            
-            
+
         }
     }
 
     public void setAreaNodesTree(TMModelNode item, TMNodeModel nodoModel) {
         TreeMapNode nodo = (TreeMapNode) item;
-        for (int i = 0; i < nodo.getChildren().size(); i++) {
 
-            TreeMapNode filho = nodo.getChildren().get(i);
+        if (nodoModel instanceof TMNodeModelComposite) {
+//            filhoModel = ((TMNodeModelComposite) nodoModel).getChildrenList().get(i);
+            for (int i = 0; i < nodo.getChildren().size(); i++) {
 
-            TMNodeModel filhoModel = ((TMNodeModelComposite) nodoModel).getChildrenList().get(i);
+                TreeMapNode filho = nodo.getChildren().get(i);
 
-            filho.setBounds(filhoModel.getArea());
-            filho.setLabel(filhoModel.getTitle());
-            System.out.println("Titulo: "+filho.getLabel()+" - "+filho.getBounds());
-            setAreaNodesTree(filho, filhoModel);
+                TMNodeModel filhoModel = ((TMNodeModelComposite) nodoModel).getChildrenList().get(i);
+
+                filho.setBounds(filhoModel.getArea());
+                filho.setLabel(filhoModel.getTitle());
+//            System.out.println("Titulo: "+filho.getLabel()+" - "+filho.getBounds());
+                setAreaNodesTree(filho, filhoModel);
+            }
         }
+
     }
 
     public void setHierarchy(String[] hierarquia) {

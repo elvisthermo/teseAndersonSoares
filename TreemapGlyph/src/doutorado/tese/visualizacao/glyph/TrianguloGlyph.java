@@ -1,4 +1,4 @@
-package doutorado.tese.visualizacao.glyph.fx;
+package doutorado.tese.visualizacao.glyph;
 
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;

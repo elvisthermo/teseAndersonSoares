@@ -97,8 +97,7 @@ public class VisualizationsArea {
             starGlyph.setQuantVar(variaveisStarGlyph.size());
             starGlyph.setManipulador(manipulador);
             starGlyph.setVisible(true);
-            starGlyphs[i] = starGlyph;
-            this.view.add(starGlyphs[i]);
+            this.view.add(starGlyph);
         }
         this.view.repaint();
     }

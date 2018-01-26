@@ -5,6 +5,7 @@
  */
 package doutorado.tese.visualizacao.glyph.fx;
 
+import doutorado.tese.visualizacao.glyph.TrianguloGlyph;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.Scene;

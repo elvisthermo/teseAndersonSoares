@@ -104,13 +104,6 @@ public class StarGlyph extends JLabel{
         }
     }
 
-    /**
-     *
-     * @param anguloAlfa angulo em graus
-     * @param r Distancia entre o polo (ponto fixo) e o ponto final do eixo
-     * polar
-     * @return Vetor contendo os pontos X e Y ja convertidos na forma cartesiana
-     */
     public double[] parsePolar2Cartesiana(double anguloAlfa, double r) {
         double pontoX = r * Math.cos(Math.toRadians(anguloAlfa));
         double pontoY = r * Math.sin(Math.toRadians(anguloAlfa));

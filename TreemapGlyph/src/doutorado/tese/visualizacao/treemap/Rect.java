@@ -5,8 +5,10 @@
  */
 package doutorado.tese.visualizacao.treemap;
 
-public class Rect {
-    public double x, y, w, h;
+import java.awt.Rectangle;
+
+public class Rect extends Rectangle{
+//    public double x, y, w, h;
 //    public String label;
 
     public Rect() {
@@ -14,27 +16,28 @@ public class Rect {
     }
 
     public Rect(Rect r) {
-        setRect(r.x, r.y, r.w, r.h);
+        setRect(r.x, r.y, r.width, r.height);
     }
 
-    public Rect(double x, double y, double w, double h) {
+    public Rect(int x, int y, int w, int h) {
         setRect(x, y, w, h);
     }
 
     public double aspectRatio() {
-        return Math.max(w/h, h/w);
+        return Math.max(width/height, height/width);
     }
 
-    public void setRect(double x, double y, double w, double h) {
+    public void setRect(int x, int y, int w, int h) {
         this.x = x;
         this.y = y;
-        this.w = w;
-        this.h = h;
+        this.width = w;
+        this.height = h;
     }
 
     @Override
     public String toString() {
-        return "X: "+(int) Math.round(x)+"\tY: "+(int) Math.round(y)+"\tW: "+(int) Math.round(w)+"\tH: "+(int) Math.round(h);
+        return "X: "+(int) Math.round(x)+"\tY: "+(int) Math.round(y)+
+                "\tW: "+(int) Math.round(width)+"\tH: "+(int) Math.round(height);
     }
     
     

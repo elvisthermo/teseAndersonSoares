@@ -20,10 +20,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -50,6 +53,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         initComponents();
+
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     }
 
@@ -65,7 +69,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         jSplitPane1 = new javax.swing.JSplitPane();
         painelEsquerda = new javax.swing.JPanel();
         painelDireita = new javax.swing.JPanel();
-        botaoGerarTreemap = new javax.swing.JButton();
+        botaoGerarVisualizacao = new javax.swing.JButton();
         checkLegenda = new javax.swing.JCheckBox();
         checkGlyph = new javax.swing.JCheckBox();
         checkStarGlyph = new javax.swing.JCheckBox();
@@ -109,11 +113,11 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
 
         painelDireita.setBorder(javax.swing.BorderFactory.createTitledBorder("Settings"));
 
-        botaoGerarTreemap.setText("Show Treemap");
-        botaoGerarTreemap.setEnabled(false);
-        botaoGerarTreemap.addActionListener(new java.awt.event.ActionListener() {
+        botaoGerarVisualizacao.setText("Show Visualization");
+        botaoGerarVisualizacao.setEnabled(false);
+        botaoGerarVisualizacao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botaoGerarTreemapActionPerformed(evt);
+                botaoGerarVisualizacaoActionPerformed(evt);
             }
         });
 
@@ -156,6 +160,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        variaveisStarList.setEnabled(false);
         jScrollPane1.setViewportView(variaveisStarList);
 
         painelLegenda.setEditable(false);
@@ -181,7 +186,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
                 .addGroup(painelDireitaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelDireitaLayout.createSequentialGroup()
                         .addGroup(painelDireitaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(botaoGerarTreemap, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(botaoGerarVisualizacao, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(painelDireitaLayout.createSequentialGroup()
                                 .addGroup(painelDireitaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(checkLegenda)
@@ -233,7 +238,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
                     .addComponent(legendaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(checkLegenda))
                 .addGap(6, 6, 6)
-                .addComponent(botaoGerarTreemap, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(botaoGerarVisualizacao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -286,35 +291,38 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public String[] parseListString2Vetor(List<String> lista){
+    public String[] parseListString2Vetor(List<String> lista) {
         String[] convertida = new String[lista.size()];
         for (int i = 0; i < convertida.length; i++) {
             convertida[i] = lista.get(i);
         }
         return convertida;
     }
-    
-    private void botaoGerarTreemapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoGerarTreemapActionPerformed
+
+    private void botaoGerarVisualizacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoGerarVisualizacaoActionPerformed
         limparPainelEsquerda();
         String itemTamanho = tamanhoTreeampComboBox.getSelectedItem().toString();
         String itemLegenda = legendaComboBox.getSelectedItem().toString();
-        String [] itensHierarquia = parseListString2Vetor(hierarquiaList.getSelectedValuesList());
+        String[] itensHierarquia = parseListString2Vetor(hierarquiaList.getSelectedValuesList());
         List<String> variaveisStarGlyph = variaveisStarList.getSelectedValuesList();
 
-        AreaDesenho areaDesenho = new AreaDesenho(painelEsquerda.getWidth(), painelEsquerda.getHeight(),
-                itemTamanho, itemLegenda, itensHierarquia, variaveisStarGlyph, manipulador);
+        VisualizationsArea v = new VisualizationsArea(painelEsquerda.getWidth(), painelEsquerda.getHeight(),
+                manipulador, itemTamanho, itensHierarquia, itemLegenda, variaveisStarGlyph);
+        painelEsquerda.add(v.getView());
 
-        painelEsquerda.add(areaDesenho);
-        painelEsquerda.repaint();
+//        painelEsquerda.repaint();
         prepararLegendaStarGlyph(variaveisStarGlyph);
         progressoBarra.setVisible(false);
-    }//GEN-LAST:event_botaoGerarTreemapActionPerformed
+
+    }//GEN-LAST:event_botaoGerarVisualizacaoActionPerformed
 
     private void checkStarGlyphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkStarGlyphActionPerformed
         if (checkStarGlyph.isSelected()) {
             Flags.setShowStarGlyph(true);
+            variaveisStarList.setEnabled(true);
         } else {
             Flags.setShowStarGlyph(false);
+            variaveisStarList.setEnabled(false);
         }
     }//GEN-LAST:event_checkStarGlyphActionPerformed
 
@@ -386,7 +394,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
-    private javax.swing.JButton botaoGerarTreemap;
+    private javax.swing.JButton botaoGerarVisualizacao;
     private javax.swing.JCheckBox checkGlyph;
     private javax.swing.JCheckBox checkLegenda;
     private javax.swing.JCheckBox checkStarGlyph;
@@ -415,6 +423,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
     private ManipuladorArquivo manipulador;
     private File selectedFile;
     private Task task;
+    private JFXPanel fxPanel;
 
     class Task extends SwingWorker<Void, Void> {
 
@@ -471,7 +480,7 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
             case 3:
                 try {
                     manipulador.carregarItensTreemap();
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
                 porcentagem = (ordem * 100) / tarefas;
@@ -518,24 +527,25 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         List<String> itens = new ArrayList<>();
         for (String cabecalho : manipulador.getCabecalho()) {
             String tipo = manipulador.getMapaCabecalho().get(cabecalho);
-            if (tipo.equalsIgnoreCase(Metadados.TipoDados.INTEGER.name())) {
+            if (tipo.equalsIgnoreCase(Metadados.TipoDados.Integer.name())) {
                 itens.add(cabecalho);
             }
         }
         atualizarComboBox(tamanhoTreeampComboBox, itens);
+        tamanhoTreeampComboBox.setEnabled(true);
     }
 
     private void loadItensLegendaTreemap() {
         List<String> itens = new ArrayList<>();
         itens.addAll(Arrays.asList(manipulador.getCabecalho()));
         atualizarComboBox(legendaComboBox, itens);
-        botaoGerarTreemap.setEnabled(true);
+        botaoGerarVisualizacao.setEnabled(true);
     }
 
     private void loadItensHierarquiaTreemap() {
         List<String> list = new ArrayList<>();
         for (Coluna c : manipulador.getColunas()) {
-            if(c.getDescription().equals(Metadados.Descricao.CATEGORICAL)){
+            if (c.getDescription().equals(Metadados.Descricao.CATEGORICAL)) {
                 list.add(c.getName());
             }
         }
@@ -548,22 +558,21 @@ public class Main extends javax.swing.JFrame implements PropertyChangeListener {
         Object[] items = itens.toArray();
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
         comboBox.setModel(model);
-        comboBox.setEnabled(true);
     }
 
     private void loadVariaveisStartGlyph() {
         List<String> itens = new ArrayList<>();
         for (String cabecalho : manipulador.getCabecalho()) {
             String tipo = manipulador.getMapaCabecalho().get(cabecalho);
-            if (tipo.equalsIgnoreCase(Metadados.TipoDados.INTEGER.name())
-                    || tipo.equalsIgnoreCase(Metadados.TipoDados.DOUBLE.name())) {
+            if (tipo.equalsIgnoreCase(Metadados.TipoDados.Integer.name())
+                    || tipo.equalsIgnoreCase(Metadados.TipoDados.Double.name())) {
                 itens.add(cabecalho);
             }
         }
         Object[] items = itens.toArray();
         DefaultComboBoxModel model = new DefaultComboBoxModel(items);
         variaveisStarList.setModel(model);
-        variaveisStarList.setEnabled(true);
+//        variaveisStarList.setEnabled(true);
     }
 
     private void appendToPane(JTextPane tp, String msg, Color c) {

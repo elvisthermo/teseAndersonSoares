@@ -8,21 +8,23 @@ package doutorado.tese.visualizacao.glyph;
 import doutorado.tese.io.ManipuladorArquivo;
 import doutorado.tese.util.Coluna;
 import doutorado.tese.util.Flags;
-import doutorado.tese.visualizacao.treemap.Rect;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 
 /**
  *
  * @author Anderson
  */
-public class StarGlyph {
+public class StarGlyph extends JLabel{
 
-    private Rect rect;
+    private Rectangle rect;
     private int pontoMedioX, pontoMedioY;
     private int quantVar;
     private double r;
@@ -32,13 +34,18 @@ public class StarGlyph {
     private ManipuladorArquivo manipulador;
     private int numLinha = 2;
 
-    public StarGlyph(Rect r, List<String> variaveisEscolhidasStarGlyph) {
+    public StarGlyph(Rectangle r, List<String> variaveisEscolhidasStarGlyph) {
         this.rect = r;
+        this.setBounds(r.x + 2, r.y + 2, r.width - 2, r.height - 2);
+//        this.setS
+        this.setBorder(BorderFactory.createLineBorder(Color.red));
         this.variaveisEscolhidasStarGlyph = variaveisEscolhidasStarGlyph;
     }
+
     /**
-     * Calcula quantos porcentos o dado atual da linha corrente equivale ao valor max
-     * da coluna.
+     * Calcula quantos porcentos o dado atual da linha corrente equivale ao
+     * valor max da coluna.
+     *
      * @param dadoColuna
      * @param maxValCol
      * @return Porcentagem equivalente ao valor max da coluna.
@@ -47,28 +54,33 @@ public class StarGlyph {
         return (dadoColuna * 100) / maxValCol;
     }
 
-    private double calcularPorcentagemParaR(double porcentagemDado, double maiorRaio){
+    private double calcularPorcentagemParaR(double porcentagemDado, double maiorRaio) {
         return (porcentagemDado * maiorRaio) / 100;
     }
-    
+
+    @Override
     public void paint(Graphics g) {
-        anguloAcc = 360 / getQuantVar();
-        anguloAlfa = 0;
-        int maiorRaio = encontrarMaiorRaio();
+        Graphics2D g2d = (Graphics2D) g.create();
+        if (getQuantVar() != 0) {
+            anguloAcc = 360 / getQuantVar();
+            anguloAlfa = 0;
+            int maiorRaio = encontrarMaiorRaio();
 //        System.out.println("Desenhar eixos polares deste star glyph");
-        for (int i = 0; i < getQuantVar(); i++) {
-            String nomeColuna = variaveisEscolhidasStarGlyph.get(i);
-            Coluna coluna = getManipulador().getColuna(nomeColuna);
-            String[] dadosColuna = coluna.getDadosColuna();
-            double dado = Double.parseDouble(dadosColuna[numLinha]);
-            double dadoMaxVal = coluna.getMapaMaiorMenor().get(coluna.getName())[0];//0 - maxValue; 1 - minValue
-            double porcentagemDado = calcularPorcentagemDado(dado, dadoMaxVal);
-            r = calcularPorcentagemParaR(porcentagemDado, maiorRaio);
-            g.setColor(Color.decode(Flags.getCor()[i]));
-            desenharEixoPolar(g);
-            anguloAlfa += anguloAcc;
+            for (int i = 0; i < getQuantVar(); i++) {
+                String nomeColuna = variaveisEscolhidasStarGlyph.get(i);
+                Coluna coluna = getManipulador().getColuna(nomeColuna);
+                String[] dadosColuna = coluna.getDadosColuna();
+                double dado = Double.parseDouble(dadosColuna[numLinha]);
+                double dadoMaxVal = coluna.getMapaMaiorMenor().get(coluna.getName())[0];//0 - maxValue; 1 - minValue
+                double porcentagemDado = calcularPorcentagemDado(dado, dadoMaxVal);
+                r = calcularPorcentagemParaR(porcentagemDado, maiorRaio);
+                g2d.setColor(Color.decode(Flags.getCor()[i]));
+                desenharEixoPolar(g2d);
+                anguloAlfa += anguloAcc;
+            }
+            numLinha++;
         }
-        numLinha++;
+        g2d.dispose();
     }
 
     public void encontrarPontoCentro(int halfWidth, int width, int halfHeight, int height) {
@@ -78,8 +90,8 @@ public class StarGlyph {
 
     private int encontrarMaiorRaio() {
         Point center = getCenter();
-        int bordaW = (int) Math.round(rect.w) - 2;
-        int bordaH = (int) Math.round(rect.h) - 2;
+        int bordaW = (int) Math.round(rect.width) - 2;
+        int bordaH = (int) Math.round(rect.height) - 2;
 
         int raio = center.x - bordaW;
         int maiorRaio = raio;
@@ -92,13 +104,6 @@ public class StarGlyph {
         }
     }
 
-    /**
-     *
-     * @param anguloAlfa angulo em graus
-     * @param r Distancia entre o polo (ponto fixo) e o ponto final do eixo
-     * polar
-     * @return Vetor contendo os pontos X e Y ja convertidos na forma cartesiana
-     */
     public double[] parsePolar2Cartesiana(double anguloAlfa, double r) {
         double pontoX = r * Math.cos(Math.toRadians(anguloAlfa));
         double pontoY = r * Math.sin(Math.toRadians(anguloAlfa));
@@ -145,8 +150,8 @@ public class StarGlyph {
     }
 
     private Point getCenter() {
-        int width = (int) Math.round(rect.w) - 1;
-        int height = (int) Math.round(rect.h) - 1;
+        int width = (int) Math.round(rect.width) - 1;
+        int height = (int) Math.round(rect.height) - 1;
 
         int halfWidth = width / 2;
         int halfHeight = height / 2;

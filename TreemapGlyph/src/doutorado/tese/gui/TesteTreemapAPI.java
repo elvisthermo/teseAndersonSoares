@@ -5,13 +5,8 @@
  */
 package doutorado.tese.gui;
 
-import com.macrofocus.treemap.AlgorithmFactory;
-import com.macrofocus.treemap.TreeMap;
 import doutorado.tese.io.ManipuladorArquivo;
-import doutorado.tese.util.Coluna;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -24,107 +19,74 @@ public class TesteTreemapAPI {
 
     public static void main(String[] args) {
         // Defining the data, column names and types
-//        Object[][] data = new Object[][]{
-//            {"alfa-romeu", "gasolina", "sem", 2, "conversivel", "traseira", "frontal", 2548, 4, 111, 5000, 13495, 1986, "Europeu"},
-//            {"bmw", "diesel", "sem", 2, "conversivel", "traseira", "frontal", 2548, 4, 111, 5000, 13495, 1986, "Europeu"},
-//            {"alfa-romeu", "gasolina", "sem", 4, "conversivel", "traseira", "frontal", 2548, 4, 111, 5000, 13495, 1986, "Europeu"},
-//            {"alfa-romeu", "gasolina", "sem", 2, "conversivel", "traseira", "frontal", 2548, 4, 111, 5000, 13495, 1986, "Europeu"},
-//            {"alfa-romeu", "gasolina", "sem", 2, "conversivel", "traseira", "frontal", 2548, 4, 111, 5000, 13495, 1986, "Europeu"},};
         ManipuladorArquivo manipulador = new ManipuladorArquivo();
         manipulador.lerArquivo(new File("C:\\Users\\Anderson Soares\\Documents\\carros_teste3.txt"));
-        manipulador.montarColunas(manipulador.getCabecalho(), manipulador.getTipos());
-        for (int i = 0; i < manipulador.getColunas().length; i++) {
-            Coluna c = manipulador.getColunas()[i];
-            c.configurarDescricao(manipulador.getDadosColuna(manipulador.getCabecalho()[i]));
-        }
 
-        Vector data = new Vector();
-        Vector columnNames = new Vector();
-        Vector columnTypes = new Vector();
+        Object[][] data = new Object[manipulador.getLinhas().length - 2][manipulador.getCabecalho().length];
+        Object[] columnNames = manipulador.getCabecalho();
+        final Class[] columnTypes = manipulador.getClassTipos();
 
-        columnNames.addAll(Arrays.asList(manipulador.getCabecalho()));
-        columnTypes.addAll(Arrays.asList(manipulador.getClassTipos()));
-
-        Vector lineData = new Vector();
-        for (int lin = 0; lin < manipulador.getDadosColuna("MARCA").length; lin++) {
-            String[] values = manipulador.getDadosLinha(lin + 2);
-            for (int col = 0; col < values.length; col++) {
-                String value = values[col];
-                Object type = columnTypes.get(col);
-                if (type.equals("String")) {
-                    lineData.add(value);
-                } else if (type.equals("Integer")) {
-                    if (value != null && value.length() != 0) {
-                        lineData.add(Integer.parseInt(value));
-                    } else {
-                        lineData.add(null);
-                    }
-                } else if (type.equals("Float")) {
-                    if (value != null && value.length() != 0) {
-                        lineData.add(Float.parseFloat(value));
-                    } else {
-                        lineData.add(null);
-                    }
-                } else if (type.equals("Double")) {
-                    if (value != null && value.length() != 0) {
-                        lineData.add(Double.parseDouble(value));
-                    } else {
-                        lineData.add(null);
-                    }
-                } else {
-                    lineData.add(value);
-                }
-            }
-            for (int i = 0; i < 1; i++) {
-                data.add(lineData);
+        for (int lin = 0; lin < manipulador.getLinhas().length - 2; lin++) {
+            String[] linha = manipulador.getDadosLinha(lin + 2);
+            for (int col = 0; col < linha.length; col++) {
+                Object valorConvertido = verificarTipoDado(linha[col], columnTypes[col]);
+                data[lin][col] = valorConvertido;
             }
         }
+        
         // Creating a standard Swing TableModel
-        TableModel tableModel = new TreeTableModel(data, columnNames, columnTypes);
+        TableModel tableModel = new DefaultTableModel(data, columnNames) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnTypes[columnIndex];
+            }
+        };
 
         // Creating the TreeMap
-        TreeMap treeMap = new TreeMap(tableModel);
-        try {
-            // Tuning the appearance of the TreeMap
-            treeMap.setAlgorithm(AlgorithmFactory.SQUARIFIED);
-            treeMap.setSizeByName("PESO");
-            treeMap.setColor(2);
-            treeMap.setBackgroundByName("MARCA");
-            treeMap.setLabels();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        TreeMap treeMap = new TreeMap(tableModel);
+//        try {
+//            // Tuning the appearance of the TreeMap
+//            treeMap.setAlgorithm(AlgorithmFactory.SQUARIFIED);
+//            treeMap.setSizeByName("PESO");
+//            treeMap.setColor(3);
+//            treeMap.setBackgroundByName("MARCA");
+//            treeMap.setLabels();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         // Creating a frame to display
         final JFrame frame = new JFrame("Hello from the TreeMap World!");
-        frame.setSize(1500, 700);
+        frame.setSize(800, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(treeMap);
+//        frame.getContentPane().add(treeMap);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-    
-    private static class TreeTableModel extends DefaultTableModel {
-        private Vector columnTypes;
 
-        public TreeTableModel(Vector data, Vector columnNames, Vector columnTypes) {
-            super(data, columnNames);
-            this.columnTypes = columnTypes;
-        }
-
-        public Class<?> getColumnClass(int columnIndex) {
-            Object type = columnTypes.get(columnIndex);
-            if (type.equals("String")) {
-                return String.class;
-            } else if (type.equals("Integer")) {
-                return Integer.class;
-            } else if (type.equals("Float")) {
-                return Float.class;
-            } else if (type.equals("Double")) {
-                return Double.class;
+    /**
+     * Responsavel por fazer a analise do tipo do dado.
+     * Essa analise e importante para que o DataModel que sera
+     * enviado ao treemap possa carregar o treemap corretamente.
+     * @param dado
+     * @param type
+     * @return O dado convertido em seu tipo original
+     */
+    public static Object verificarTipoDado(String dado, Class type) {
+        Object valorConvertido = null;
+        if (dado != null && dado.length() != 0) {
+            if (type.equals(Integer.class)) {
+                valorConvertido = Integer.parseInt(dado);
+            } else if (type.equals(Double.class)) {
+                valorConvertido = Double.parseDouble(dado);
+            } else if (type.equals(Float.class)) {
+                valorConvertido = Float.parseFloat(dado);
             } else {
-                return Object.class;
+                valorConvertido = dado;
             }
+        } else {
+            valorConvertido = null;
         }
-    }
+        return valorConvertido;
+    }    
 }

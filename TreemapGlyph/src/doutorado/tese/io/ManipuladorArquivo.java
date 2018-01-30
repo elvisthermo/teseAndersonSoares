@@ -41,19 +41,19 @@ public class ManipuladorArquivo {
         file = arquivo;
         try (BufferedReader reader = Files.newBufferedReader(file.toPath(), charset)) {
             String line = null;
-            int cont = 0;
+            int numLinha = 0;
 
             while ((line = reader.readLine()) != null) {
-                if (cont == 0) {
+                if (numLinha == 0) {
                     cabecalho = montarCabecalho(line);
                 }
-                if (cont == 1) {
+                if (numLinha == 1) {
                     tipos = desvendarTiposDados(line);
                     montarMapaCabecalhoTipos(getCabecalho(), tipos);
                 }
 //                montarColunas(cabecalho, tipos);
                 bufferArquivo.append(line).append("\n");
-                cont++;
+                numLinha++;
             }
             linhas = bufferArquivo.toString().split("\n");
         } catch (IOException e) {
@@ -69,9 +69,9 @@ public class ManipuladorArquivo {
      */
     public String[] getDadosColuna(String nomeColuna) {
 //        String[] linhas = bufferArquivo.toString().split("\n");
-        String[] dados = new String[linhas.length - 2];
-        for (int numLinha = 2; numLinha < linhas.length; numLinha++) {
-            String[] vetorLinha = linhas[numLinha].split("\t|,");
+        String[] dados = new String[getLinhas().length - 2];
+        for (int numLinha = 2; numLinha < getLinhas().length; numLinha++) {
+            String[] vetorLinha = getLinhas()[numLinha].split("\t|,");
             for (int j = 0; j < cabecalho.length; j++) {
                 if (cabecalho[j].equalsIgnoreCase(nomeColuna)) {
                     dados[numLinha - 2] = vetorLinha[j];
@@ -83,8 +83,12 @@ public class ManipuladorArquivo {
     }
 
     public String[] getDadosLinha(int numLinha) {
-//        String[] linhas = bufferArquivo.toString().split("\n");
-        String[] vetorLinha = linhas[numLinha].split("\t|,");
+        String[] vetorLinha = getLinhas()[numLinha].split("\t|,");
+        return vetorLinha;
+    }
+
+    public Object[] getDadosByLinha(int numLinha) {
+        String[] vetorLinha = getLinhas()[numLinha].split("\t|,");
         return vetorLinha;
     }
 
@@ -175,17 +179,22 @@ public class ManipuladorArquivo {
         Class[] classes = new Class[tipos.length];
         for (int i = 0; i < tipos.length; i++) {
             switch (tipos[i]) {
-                case "STRING": classes[i] = String.class;
-                break;
-                case "INTEGER": classes[i] = Integer.class;
-                break;
-                case "DOUBLE": classes[i] = Double.class;
-                break;
-                case "FLOAT": classes[i] = Float.class;
-                break;
-                case "BOOLEAN": classes[i] = Boolean.class;
-                break;
-            };
+                case "String":
+                    classes[i] = String.class;
+                    break;
+                case "Integer":
+                    classes[i] = Integer.class;
+                    break;
+                case "Double":
+                    classes[i] = Double.class;
+                    break;
+                case "Float":
+                    classes[i] = Float.class;
+                    break;
+                case "Boolean":
+                    classes[i] = Boolean.class;
+                    break;
+            }
         }
         return classes;
     }
@@ -209,12 +218,64 @@ public class ManipuladorArquivo {
         itensTreemap = new TreeMapItem[totalItens];
         for (int i = 0; i < totalItens; i++) {
             String[] dadosLinha = getDadosLinha(i + 2);
-            TreeMapItem itemLocal = new TreeMapItem();
+            TreeMapItem itemLocal = null;
+            try {
+                itemLocal = new TreeMapItem(1, 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             for (int j = 0; j < dadosLinha.length; j++) {
                 itemLocal.getMapaDetalhesItem().put(getColunas()[j], dadosLinha[j]);
             }
             itensTreemap[i] = itemLocal;
         }
+    }
+
+    /**
+     * @return Total de linhas do arquivo, incluindo cabeçalho e linha de tipos
+     * (caso tenha)
+     */
+    public String[] getLinhas() {
+        return linhas;
+    }
+
+    /**
+     * Responsavel por fazer a analise do tipo do dado. Essa analise e
+     * importante para que o DataModel que sera enviado ao treemap possa
+     * carregar o treemap corretamente.
+     *
+     * @param dado
+     * @param type
+     * @return O dado convertido em seu tipo original
+     */
+    public static Object verificarTipoDado(String dado, Class type) {
+        Object valorConvertido = null;
+        if (dado != null && dado.length() != 0) {
+            if (type.equals(Integer.class)) {
+                valorConvertido = Integer.parseInt(dado);
+            } else if (type.equals(Double.class)) {
+                valorConvertido = Double.parseDouble(dado);
+            } else if (type.equals(Float.class)) {
+                valorConvertido = Float.parseFloat(dado);
+            } else {
+                valorConvertido = dado;
+            }
+        } else {
+            valorConvertido = null;
+        }
+        return valorConvertido;
+    }
+
+    public Object[][] montarMatrizDados() {
+        Object[][] data = new Object[getLinhas().length - 2][getCabecalho().length];
+        for (int lin = 0; lin < getLinhas().length - 2; lin++) {
+            String[] linha = getDadosLinha(lin + 2);
+            for (int col = 0; col < linha.length; col++) {
+                Object valorConvertido = verificarTipoDado(linha[col], getClassTipos()[col]);
+                data[lin][col] = valorConvertido;
+            }
+        }
+        return data;
     }
 
 }

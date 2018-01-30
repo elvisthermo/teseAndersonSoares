@@ -9,30 +9,35 @@ import doutorado.tese.organize.QuickSort;
 import doutorado.tese.util.Coluna;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
+import java.awt.Rectangle;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Queue;
+import java.util.Vector;
+import net.bouthier.treemapAWT.TMModelNode;
+import net.bouthier.treemapAWT.TMModelUpdater;
 
 /**
  *
  * @author Anderson Soares
  */
-public abstract class TreeMapNode {
+public abstract class TreeMapNode implements TMModelNode{
 
     double size;
-    Rect bounds;
+    Rectangle bounds;
     int classificationOrder = 0;
     int depth;
     TreeMapNode paiLevel;
-    boolean raiz;
-    protected String label;
-    boolean isUseLabel = false;
+    private boolean raiz;
+    private String label;
+    private boolean useLabel = false;
     private boolean hasChildren;
     protected HashMap<Coluna, String> mapaDetalhesItem;
-    protected Rect bordaInterna;
-//    int borderWidth = 2;
-//    int drawIniY = 20;//x inicial para desenhar
-    ArrayList<TreeMapNode> itemsFilhos;
+    protected Rectangle bordaInterna;
+    private TMModelUpdater updater = null; // the updater for this node
+    protected List<TreeMapNode> children;
+    private TreeMapNode parent = null;
 
     public void setDepth(int depth) {
         this.depth = depth;
@@ -49,12 +54,16 @@ public abstract class TreeMapNode {
     public void setSize(Coluna colunaTamanho) {
         this.size = 0;
     }
+    
+    public void setSize(Double tamanho) {
+        this.size = tamanho;
+    }
 
-    public Rect getBounds() {
+    public Rectangle getBounds() {
         return bounds;
     }
 
-    public void setBounds(Rect bounds) {
+    public void setBounds(Rectangle bounds) {
         this.bounds = bounds;
     }
 
@@ -91,6 +100,11 @@ public abstract class TreeMapNode {
         return raiz;
     }
 
+    public void setRaiz(boolean raiz) {
+        this.raiz = raiz;
+    }
+
+    
     /**
      * @return the label
      */
@@ -141,47 +155,33 @@ public abstract class TreeMapNode {
         return new int[]{textWidth, fontSize};
     }
 
-    public abstract ArrayList<TreeMapNode> getItemsFilhos();
-
     public abstract void inserirFilhos(Queue<String> hierarquia, TreeMapNode item, TreeMapNode pai);
-
-    public abstract void paint(Graphics2D g);
-
-//    public void redefinirBorda() {
-//        int x = (int) Math.round(this.bounds.x) + this.borderWidth;
-//        int y = (int) Math.round(this.bounds.y) + this.drawIniY;
-//        int width = (int) Math.round(this.bounds.w) - (2 * this.borderWidth);
-//        int height = (int) Math.round(this.bounds.h) - this.drawIniY - this.borderWidth;
-//        setBordaInterna(new Rect(x, y, width, height));
-//    }
 
     /**
      * @return the hasChildren
      */
     public boolean isHasChildren() {
-//        System.out.println(this);
-        if (this.getItemsFilhos().size() > 0) {
+        if (this.getChildren().size() > 0) {
             return hasChildren = true;
         } else {
             return hasChildren = false;
         }
     }
 
-    public ArrayList<TreeMapNode> organize() {
+    public List<TreeMapNode> organize() {
         if (this.isHasChildren()) {
-            for (TreeMapNode filho : this.getItemsFilhos()) {
+            for (TreeMapNode filho : this.getChildren()) {
                 filho.organize();
             }
-            QuickSort.sortDescending(this.getItemsFilhos());
-//            this.bubbleSort(this.getItemsFilhos());
+            QuickSort.sortDescending(this.getChildren());
         }
-        return this.getItemsFilhos();
+        return this.getChildren();
     }
 
     /**
      * @return the bordaInterna
      */
-    public Rect getBordaInterna() {
+    public Rectangle getBordaInterna() {
         return bordaInterna;
     }
 
@@ -194,7 +194,85 @@ public abstract class TreeMapNode {
 
     @Override
     public String toString() {
-        return "[Label: " + label + " Pai: " + paiLevel.label + " Size: " + size; //To change body of generated methods, choose Tools | Templates.
+        return "[Label: " + getLabel() + " Pai: " + paiLevel.getLabel() + " Size: " + size; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    //Metodos para criar uma arvore
+    public TreeMapNode addChild(TreeMapNode child) {
+        child.setParent(this);
+        this.children.add(child);
+        return child;
     }
 
+    public void addChildren(List<TreeMapNode> children) {
+        for (TreeMapNode node : children) {
+            node.setParent(this);
+        }
+        this.children.addAll(children);
+    }
+
+    public List<TreeMapNode> getChildren() {
+        return children;
+    }
+
+    public Vector<TreeMapNode> parseList2Vector(List<TreeMapNode> list) {
+        Vector<TreeMapNode> v = new Vector<TreeMapNode>();
+        for (TreeMapNode node : list) {
+            v.add(node);
+        }
+        return v;
+    }
+    
+    public TreeMapNode getParent() {
+        return parent;
+    }
+
+    public void setParent(TreeMapNode parent) {
+        this.parent = parent;
+    }
+    
+    //Metodos implementados da interface 
+    @Override
+    public Object getRoot() {
+        if (this.getParent() == null) {
+            return this;
+        }
+        return this.getParent().getRoot();
+    }
+
+    @Override
+    public Enumeration children(Object node) {
+        TreeMapNode n = (TreeMapNode) node;
+        Vector v = parseList2Vector(n.getChildren());
+        return v.elements();
+    }
+
+    @Override
+    public boolean isLeaf(Object node) {
+        boolean leaf = false;
+        TreeMapNode n = (TreeMapNode) node;
+        if (n.getChildren().isEmpty()) {
+            return true;
+        }
+        return leaf;
+    }
+
+    @Override
+    public void setUpdater(TMModelUpdater updater) {
+        this.updater = updater;
+    }
+
+    /**
+     * @return the useLabel
+     */
+    public boolean isUseLabel() {
+        return useLabel;
+    }
+
+    /**
+     * @param useLabel the useLabel to set
+     */
+    public void setUseLabel(boolean useLabel) {
+        this.useLabel = useLabel;
+    }
 }

@@ -1,0 +1,7 @@
+MARCA	COMBUSTIVEL	TURBO	NRPORTAS	TIPO	TRACAO	POSMOTOR	PESO	NRCILINDROS	POTENCIA	RPM	VALOR	ANO	ORIGEM
+String	String	String	Integer	String	String	String	Integer	Integer	Integer	Integer	Integer	Integer	String
+alfa-romeu	gasolina	sem	2	conversivel	traseira	frontal	2548	4	111	5000	13495	1986	Europeu
+alfa-romeu	gasolina	sem	2	conversivel	traseira	frontal	2548	4	111	5000	16500	1985	Europeu
+alfa-romeu	gasolina	sem	2	hatch	traseira	frontal	2823	6	154	5000	16500	1984	Europeu
+audi	gasolina	sem	4	sedan	frontal	frontal	2337	4	102	5500	13950	1982	Europeu
+

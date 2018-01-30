@@ -36,17 +36,17 @@ public class Coluna {
     public Coluna(ManipuladorArquivo manipulador, String name, String type) {
         this.name = name;
         switch (type) {
-            case "BOOLEAN":
-                this.type = Metadados.TipoDados.BOOLEAN;
+            case "Boolean":
+                this.type = Metadados.TipoDados.Boolean;
                 break;
-            case "DOUBLE":
-                this.type = Metadados.TipoDados.DOUBLE;
+            case "Double":
+                this.type = Metadados.TipoDados.Double;
                 break;
-            case "INTEGER":
-                this.type = Metadados.TipoDados.INTEGER;
+            case "Integer":
+                this.type = Metadados.TipoDados.Integer;
                 break;
-            case "STRING":
-                this.type = Metadados.TipoDados.STRING;
+            case "String":
+                this.type = Metadados.TipoDados.String;
                 break;
         }
         this.manipulador = manipulador;
@@ -131,7 +131,7 @@ public class Coluna {
         dadosDistintos = analisarDadosDistintos(Arrays.asList(dadosColunas));
         this.quantValoresDistintos = getDadosDistintos().size();
         //pass 1: define description
-        if (type.equals(Metadados.TipoDados.STRING)) {
+        if (type.equals(Metadados.TipoDados.String)) {
             this.setDescription(Metadados.Descricao.CATEGORICAL);
         } else if (this.quantValoresDistintos > categoricalLimit) {
             setDescription(Metadados.Descricao.CONTINUOUS);
@@ -140,8 +140,8 @@ public class Coluna {
         }
         //pass 2: setValues
         if (getDescription() == Metadados.Descricao.CONTINUOUS
-                || (getDescription() == Metadados.Descricao.CATEGORICAL && type.equals(Metadados.TipoDados.INTEGER))
-                || (getDescription() == Metadados.Descricao.CATEGORICAL && type.equals(Metadados.TipoDados.DOUBLE))) {
+                || (getDescription() == Metadados.Descricao.CATEGORICAL && type.equals(Metadados.TipoDados.Integer))
+                || (getDescription() == Metadados.Descricao.CATEGORICAL && type.equals(Metadados.TipoDados.Double))) {
             double higher = Double.MIN_VALUE;
             double lower = Integer.MAX_VALUE;
 

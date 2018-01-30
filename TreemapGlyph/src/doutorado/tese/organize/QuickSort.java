@@ -6,7 +6,7 @@
 package doutorado.tese.organize;
 
 import doutorado.tese.visualizacao.treemap.TreeMapNode;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class QuickSort {
     
-    public static ArrayList<TreeMapNode> sortDescending(ArrayList<TreeMapNode> items) {
+    public static List<TreeMapNode> sortDescending(List<TreeMapNode> items) {
         if (items == null || items.isEmpty()) {
             return null;
         }
@@ -23,7 +23,7 @@ public class QuickSort {
         return items;
     }
     
-    private static void quickSortDesc(ArrayList<TreeMapNode> inputArr, int lowerIndex, int higherIndex) {
+    private static void quickSortDesc(List<TreeMapNode> inputArr, int lowerIndex, int higherIndex) {
 
         int i = lowerIndex;
         int j = higherIndex;
